@@ -7,28 +7,28 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
 
-function Register (props) {
+const Register = (props) => {
   const [email, setEmail] = React.useState('');
   const [name, setName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordCheck, setPasswordCheck] = React.useState('');
   const [errorPage, setErrorPage] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState('')
+  const [errorMsg, setErrorMsg] = React.useState('');
   const navigate = useNavigate();
 
-  const register = async () => {
+  const handleRegister = async () => {
     if (password !== passwordCheck) {
-      setErrorMsg('Passwords do not Match. Please Try again.')
-      setErrorPage(true)
-      return
+      setErrorMsg('Passwords do not Match. Please Try again.');
+      setErrorPage(true);
+      return;
     } else if (password.length < 6) {
-      setErrorMsg('Password must be atleast 6 characters. Please Try again.')
-      setErrorPage(true)
-      return
+      setErrorMsg('Password must be atleast 6 characters. Please Try again.');
+      setErrorPage(true);
+      return;
     } else if (name.length <= 1) {
-      setErrorMsg('Invalid Name. Please Try again.')
-      setErrorPage(true)
-      return
+      setErrorMsg('Invalid Name. Please Try again.');
+      setErrorPage(true);
+      return;
     }
     const response = await fetch('http://localhost:5005/user/auth/register', {
       method: 'POST',
@@ -41,12 +41,12 @@ function Register (props) {
     });
     const data = await response.json();
     if (data.error) {
-      setErrorMsg(data.error)
-      setErrorPage(true)
+      setErrorMsg(data.error);
+      setErrorPage(true);
     } else if (data.token) {
-      console.log(data.token)
-      props.setToken(data.token)
-      navigate('/')
+      console.log(data.token);
+      props.setToken(data.token);
+      navigate('/');
     }
   };
 
@@ -87,7 +87,7 @@ function Register (props) {
             <TextField id="outlined-basic" label="Confirm Password" variant="outlined" onChange={e => setPasswordCheck(e.target.value)}/>
           </Grid>
           <Grid xs={12}>
-            <Button variant="text" onClick={register} style = {{ textAlign: 'center' }}>Submit</Button>
+            <Button variant="text" onClick={handleRegister} style = {{ textAlign: 'center' }}>Submit</Button>
           </Grid>
         </Grid>
       </Box>
