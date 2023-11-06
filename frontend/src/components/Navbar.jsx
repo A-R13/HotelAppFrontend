@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'
 // import IconButton from '@mui/material/IconButton';
 // import MenuIcon from '@mui/icons-material/Menu';
 
@@ -26,7 +27,9 @@ const Navbar = () => {
           </Typography>
           <Button color="inherit">All listings</Button>
           <Button color="inherit">Your Listings</Button>
-          <Button color="inherit">Register</Button>
+          <Link to= "/register">
+            <Button color="inherit">Register</Button>
+          </Link>
           <Button color="inherit">Login</Button>
           <Button color="inherit">Logout</Button>
         </Toolbar>
