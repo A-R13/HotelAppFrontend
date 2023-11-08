@@ -1,3 +1,4 @@
+// HELPER FUNCTION TO CONVERT FILE INTO URL FOR THUMBNAIL
 export const fileToDataUrl = (file) => {
   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const valid = validFileTypes.find((type) => type === file.type);
@@ -13,4 +14,29 @@ export const fileToDataUrl = (file) => {
   });
   reader.readAsDataURL(file);
   return dataUrlPromise;
+}
+
+export const getAllListings = async () => {
+  const response = await fetch('http://localhost:5005/listings', {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+    }
+  });
+
+  const data = await response.json();
+  return data;
+}
+
+export const getSpecificListing = async (listingId, token) => {
+  const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+  });
+
+  const data = await response.json();
+  return data;
 }

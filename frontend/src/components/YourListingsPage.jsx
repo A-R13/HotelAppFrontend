@@ -3,59 +3,44 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import BasicModal from './BasicModal';
 import Listing from './Listing';
+import { getAllListings, getSpecificListing } from '../Helpers';
 
-const YourListingsPage = (props) => {
+const YourListingsPage = ({ token, email }) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
 
   const [listings, setListings] = useState([]);
 
-  const handle = async () => {
-    const response = await fetch('http://localhost:5005/listings', {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-      }
-    });
-
-    const data = await response.json();
-    if (data.error) {
-      setOpen(true);
-      setContent(data.error);
-    } else {
-      // go to listings page
-      // get all listings for the particular user
-      const userListings = data.listings.filter(listing => listing.owner === props.email);
-      // for each listing
-      //
-      setListings(userListings);
-    }
-  }
-
   useEffect(() => {
-    handle();
+    const updateListings = async () => {
+      const data = await getAllListings();
+
+      let myListings = [];
+      if (data.listings) {
+        // extract the users listings
+        const allListings = data.listings;
+        myListings = allListings.filter((listing) => listing.owner === email);
+
+        const listingsToShow = [];
+
+        myListings.forEach(async (listing) => {
+          const updatedListingInfo = await getSpecificListing(listing.id, token);
+          console.log(updatedListingInfo);
+          if (updatedListingInfo.listing) {
+            updatedListingInfo.listing.id = listing.id;
+            listingsToShow.push(updatedListingInfo.listing);
+          }
+        });
+
+        setListings(listingsToShow);
+      } else {
+        setOpen(true);
+        setContent(data);
+      }
+    };
+
+    updateListings();
   }, []);
-
-  // let updatedListings = null;
-  // useEffect(() => {
-  //   updatedListings = listings.map(async (listing) => {
-  //     const response = await fetch(`http://localhost:5005/listing/${listing.id}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-type': 'application/json',
-  //       }
-  //     });
-
-  //     const data = await response.json();
-  //     // console.log(data);
-  //     if (data.error) {
-  //       setOpen(true);
-  //       setContent(data.error);
-  //     } else {
-  //       return data;
-  //     }
-  //   });
-  // }, [listings]);
 
   return (
     <>
