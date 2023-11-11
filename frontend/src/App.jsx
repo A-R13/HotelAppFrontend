@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
 import Register from './components/Register.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
+import LandingPage from './components/LandingPage.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);
@@ -11,7 +12,7 @@ function App () {
       <Router>
       <Navbar token={token} setToken={setToken}/>
       <Routes>
-        <Route path = "/" element={<>Home Page</>}/>
+        <Route path = "/" element={<LandingPage token = {token}/>}/>
         <Route path = "/register" element={<Register token = {token} setToken = {setToken}/>}/>
         <Route path = "/login" element={<Login token = {token} setToken = {setToken}/>}/>
       </Routes>
