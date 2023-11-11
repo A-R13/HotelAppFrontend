@@ -10,6 +10,7 @@ const YourListingsPage = ({ token, email }) => {
   const [content, setContent] = useState('');
 
   const [listings, setListings] = useState([]);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const updateListings = async () => {
@@ -23,20 +24,25 @@ const YourListingsPage = ({ token, email }) => {
 
         const listingsToShow = [];
 
-        myListings.forEach(async (listing) => {
+        const getListingInfo = async (listing) => {
           const updatedListingInfo = await getSpecificListing(listing.id, token);
-          console.log(updatedListingInfo);
+          // console.log(updatedListingInfo);
           if (updatedListingInfo.listing) {
             updatedListingInfo.listing.id = listing.id;
             listingsToShow.push(updatedListingInfo.listing);
           }
-        });
+        }
 
+        const arrayOfAsyncs = myListings.map((listing) => getListingInfo(listing))
+
+        await Promise.all(arrayOfAsyncs);
         setListings(listingsToShow);
       } else {
         setOpen(true);
         setContent(data);
+        // setLoading(true);
       }
+      // setLoading(false);
     };
 
     updateListings();
@@ -54,9 +60,9 @@ const YourListingsPage = ({ token, email }) => {
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {listings.map((listing) => (
+        {listings.map((listing, idx) => (
           <Listing
-            key={listing.id}
+            key={idx}
             listing={listing}
           />
         ))}

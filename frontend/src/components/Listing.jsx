@@ -1,16 +1,18 @@
 import React from 'react';
+import { Button } from '@mui/material';
+import SVGRating from './SVGRating';
 
 const Listing = (props) => {
-  console.log(props.listing);
   const listingInfo = props.listing;
 
   const title = listingInfo.title;
-  // const propertyType = listingInfo.metadata.propertyType;
-  // number of  beds
-  // numBathrooms
+  const propertyType = listingInfo.metadata.propertyType;
+  const numBathrooms = listingInfo.metadata.numBathrooms;
+  const numBeds = listingInfo.metadata.numBeds;
+
   const thumbnail = listingInfo.thumbnail;
-  // svg rating
-  // const reviewCount = listingInfo.reviews.length;
+  const rating = 1;
+  const reviewCount = listingInfo.reviews.length;
 
   const price = listingInfo.price;
 
@@ -19,13 +21,14 @@ const Listing = (props) => {
     <div className='listing'>
       <img src={thumbnail} alt={''} />
       <h2>{title}</h2>
-      <p>Property Type: {''}</p>
-      <p>Number of Beds: {''}</p>
-      <p>Number of Bathrooms: {''}</p>
-      <p>Rating: {0} (based on {0} reviews)</p>
+      <p>Property Type: {propertyType}</p>
+      <p>Number of Beds: {numBeds}</p>
+      <p>Number of Bathrooms: {numBathrooms}</p>
+      <SVGRating value={rating} ></SVGRating>
+      <p>{reviewCount} reviews</p>
       <p>Price per Night: ${price}</p>
-      {/* <button onClick={() => onEdit(listingInfo.id)}>Edit</button> */}
-      {/* <button onClick={() => onDelete(listingInfo.id)}>Delete</button> */}
+      <Button onClick={() => console.log('edit btn clicked')}>Edit</Button>
+      <Button onClick={() => console.log('delete btn clicked')}>Delete</Button>
     </div>
   );
 };

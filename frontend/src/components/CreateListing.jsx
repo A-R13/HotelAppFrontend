@@ -34,6 +34,7 @@ const CreateListing = (props) => {
   const [propertyType, setPropertyType] = useState('');
   const [numBathrooms, setNumBathrooms] = useState(0);
   const [bedrooms, setBedrooms] = useState(0);
+  const [numBeds, setNumBeds] = useState(0);
   const [amenities, setAmenities] = useState('');
 
   const handleSubmit = async (e) => {
@@ -54,8 +55,7 @@ const CreateListing = (props) => {
     const metadata = {
       propertyType,
       numBathrooms,
-      // numBeds
-      //
+      numBeds
     };
 
     let thumbnailUrl = ''
@@ -187,7 +187,7 @@ const CreateListing = (props) => {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Bedrooms"
@@ -195,6 +195,17 @@ const CreateListing = (props) => {
                   type='number'
                   value={bedrooms}
                   onChange={(e) => setBedrooms(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Number of beds in each bedroom"
+                  name='numberOfBeds'
+                  type='number'
+                  value={numBeds}
+                  onChange={(e) => setNumBeds(e.target.value)}
                   required
                 />
               </Grid>
