@@ -20,7 +20,6 @@ const VisuallyHiddenInput = styled('input')({
 
 const CreateListing = (props) => {
   const navigate = useNavigate();
-  // const [listingAdded, setListingAdded] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
@@ -58,10 +57,9 @@ const CreateListing = (props) => {
       numBeds
     };
 
-    let thumbnailUrl = ''
-
+    let thumbnailUrl = '';
     try {
-      thumbnailUrl = fileToDataUrl(thumbnail);
+      thumbnailUrl = await fileToDataUrl(thumbnail);
     } catch (error) {
       setOpen(true);
       setContent('Listing thumbnail was not a png, jpg or jpeg');
@@ -92,7 +90,6 @@ const CreateListing = (props) => {
     } else {
       // go to listings page
       navigate('/yourListings');
-      console.log('successfully created listing');
     }
   }
 
@@ -161,6 +158,7 @@ const CreateListing = (props) => {
                   Upload Listing Thumbnail
                   <VisuallyHiddenInput
                     type="file"
+                    name="thumbnail"
                     onChange={(e) => setThumbnail(e.target.files[0])}
                   />
                 </Button>
