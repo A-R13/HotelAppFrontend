@@ -1,11 +1,10 @@
 import * as React from 'react';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
+import { Rating, Stack } from '@mui/material';
 
-const SVGRating = (props) => {
+const SVGRating = ({ rating }) => {
   return (
     <Stack spacing={1}>
-      <Rating name="rating" defaultValue={props.value} precision={0.5} readOnly />
+      <Rating name="rating" value={rating} readOnly />
     </Stack>
   );
 }

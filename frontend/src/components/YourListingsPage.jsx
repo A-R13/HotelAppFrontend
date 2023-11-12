@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import BasicModal from './BasicModal';
 import Listing from './Listing';
@@ -10,7 +10,6 @@ const YourListingsPage = ({ token, email }) => {
   const [content, setContent] = useState('');
 
   const [listings, setListings] = useState([]);
-  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const updateListings = async () => {
@@ -48,6 +47,21 @@ const YourListingsPage = ({ token, email }) => {
     updateListings();
   }, []);
 
+  if (token === null) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <>
+          You are not logged in.
+        </>
+      </Box>
+    );
+  }
+
   return (
     <>
       <div>
@@ -59,14 +73,14 @@ const YourListingsPage = ({ token, email }) => {
         </Button>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
         {listings.map((listing, idx) => (
           <Listing
             key={idx}
             listing={listing}
           />
         ))}
-      </div>
+      </Box>
 
       <BasicModal open={open} setOpen={setOpen} content={content}>
       </BasicModal>
