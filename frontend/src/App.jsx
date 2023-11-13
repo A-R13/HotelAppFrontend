@@ -3,13 +3,13 @@ import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
 import Register from './components/Register.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './components/Login.jsx';
-import YourListingsPage from './components/YourListingsPage.jsx';
-import CreateListing from './components/CreateListing.jsx';
+import YourListingsPage from './components/listings/YourListingsPage.jsx';
+import CreateListing from './components/listings/CreateListing.jsx';
+import EditListing from './components/listings/EditListing.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);
   const [email, setEmail] = React.useState('');
-  // const [listingAdded, setListingAdded] = React.useState(false);
 
   return (
     <>
@@ -36,6 +36,7 @@ function App () {
         />
         <Route path = "/yourListings" element={<YourListingsPage token = {token} email={email}/>}/>
         <Route path = "/createListing" element={<CreateListing token = {token}/>}/>
+        <Route path = "/editListing/:id" element={<EditListing token = {token}/>}/>
       </Routes>
     </Router>
     </>

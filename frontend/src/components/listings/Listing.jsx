@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
-import SVGRating from './SVGRating';
-import Image from './Image';
+import SVGRating from '../SVGRating';
+import Image from '../Image';
+import { Link } from 'react-router-dom';
 
 const Listing = (props) => {
   const listingInfo = props.listing;
@@ -22,6 +23,7 @@ const Listing = (props) => {
   const ratingScore = total / reviewCount;
 
   // have a default thumbnail for alt
+  const listingId = listingInfo.id;
   return (
     <div className='listing'>
       <Image src={thumbnail} alt={'image of property'} />
@@ -32,7 +34,7 @@ const Listing = (props) => {
       <SVGRating value={ratingScore} ></SVGRating>
       <Typography>{reviewCount} reviews</Typography>
       <Typography>Price per Night: ${price}</Typography>
-      <Button onClick={() => console.log('edit btn clicked')}>Edit</Button>
+      <Button component={Link} to={`/editListing/${listingId}`}>Edit</Button>
       <Button onClick={() => console.log('delete btn clicked')}>Delete</Button>
     </div>
   );
