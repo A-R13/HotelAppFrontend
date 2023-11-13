@@ -7,7 +7,6 @@ import React from 'react';
 // import LocationInput from './LocationInput';
 // import GuestsMenu from './GuestsMenu';
 // import DatesSelection from './DatesSelection';
-import { Button, TextField, Box } from '@mui/material';
 import Slider from '@mui/material/Slider';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -16,8 +15,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField, Container, Paper, Grid, Typography, Box, Button } from '@mui/material';
 
-import '../index.css'
 import { getSpecificListing } from '../Helpers';
 
 const SearchPanel = (props) => {
@@ -65,10 +64,89 @@ const SearchPanel = (props) => {
   }
 
   return (
-    <div className = 'search-Container'>
-      <h2>Book unique places to stay and things to do.</h2>
-      <div className = 'search-fields'>
-        <TextField
+    <Container maxWidth="sm">
+        <Paper elevation={3} style={{ padding: '20px' }}>
+          <Typography variant="h5" align="center" style={{ marginBottom: '20px' }}>
+            Filter listings
+          </Typography>
+          <form>
+            <Grid container spacing={3}>
+              <Grid item xs={10} styles = {{ alignContent: 'center', justifyContent: 'center' }}>
+              <TextField
+                id = 'filled-basic'
+                label = 'Where to'
+                variant = 'filled'
+                value = {dest}
+                onChange={e => setDest(e.target.value)}
+              ></TextField>
+              </Grid>
+              <Grid item xs={7}>
+                <h4 style={{ textAlign: 'left' }}>Price:</h4>
+                <Box sx={{ width: 300 }}>
+                  <Slider
+                    min={0}
+                    max={1000}
+                    getAriaLabel={() => 'Price'}
+                    value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    valueLabelDisplay="auto"
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={7}>
+                <h4 style={{ textAlign: 'left' }}>Number of Bedrooms:</h4>
+                <Box sx={{ width: 300 }}>
+                  <Slider
+                  min={0}
+                  max={10}
+                  getAriaLabel={() => 'Bedrooms'}
+                  value={beds}
+                  onChange={e => setBeds(e.target.value)}
+                  valueLabelDisplay="auto"
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={8}>
+                <InputLabel id="demo-simple-select-label" style = {{ textAlign: 'left', fontSize: '1.5rem' }}>Reviews</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  style = {{ width: '50%' }}
+                  value={review}
+                  label="Reviews"
+                  onChange={e => setReviews(e.target.value)}
+                  >
+                  <MenuItem value={1} >Lowest To Highest</MenuItem>
+                  <MenuItem value={2}>Highest To Lowest</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={6} >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                    <DatePicker label="Check-in" />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs = {6} >
+               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                    <DatePicker label="Check-out" />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={5}>
+                <Button onClick= { () => { filterListings(props.allListings) }}>search</Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+    </Container>
+  );
+};
+
+export default SearchPanel;
+
+/* <TextField
         id = 'filled-basic'
         label = 'Where to'
         variant = 'filled'
@@ -121,10 +199,4 @@ const SearchPanel = (props) => {
               </DemoContainer>
             </LocalizationProvider>
           </div>
-        <Button className = 'search-submit'onClick= { () => { filterListings(props.allListings) }}>search</Button>
-      </div>
-    </div>
-  );
-};
-
-export default SearchPanel;
+        <Button className = 'search-submit'onClick= { () => { filterListings(props.allListings) }}>search</Button> */
