@@ -1,12 +1,14 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import SVGRating from '../SVGRating';
 import Image from '../Image';
 import { Link } from 'react-router-dom';
+import BasicModal from '../BasicModal';
 
 const Listing = (props) => {
   const listingInfo = props.listing;
-
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState('');
   const title = listingInfo.title;
   const propertyType = listingInfo.metadata.propertyType;
   const numBathrooms = listingInfo.metadata.numBathrooms;
@@ -21,9 +23,29 @@ const Listing = (props) => {
   });
 
   const ratingScore = total / reviewCount;
+  const listingId = listingInfo.id;
+
+  const handleDelete = async () => {
+    const response = await fetch(`http://localhost:5005/listings/${listingId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${props.token}`,
+      }
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      // if error, show error popup. else go to listings page
+      setOpen(true);
+      setContent(data.error);
+    } else {
+      // update Listings
+      props.updateListings();
+    }
+  }
 
   // have a default thumbnail for alt
-  const listingId = listingInfo.id;
   return (
     <div className='listing'>
       <Image src={thumbnail} alt={'image of property'} />
@@ -35,7 +57,8 @@ const Listing = (props) => {
       <Typography>{reviewCount} reviews</Typography>
       <Typography>Price per Night: ${price}</Typography>
       <Button component={Link} to={`/editListing/${listingId}`}>Edit</Button>
-      <Button onClick={() => console.log('delete btn clicked')}>Delete</Button>
+      <Button onClick={() => handleDelete()}>Delete</Button>
+      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
     </div>
   );
 };
