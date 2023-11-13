@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import BasicModal from './BasicModal';
+import BasicModal from '../BasicModal';
 import Listing from './Listing';
-import { getAllListings, getSpecificListing } from '../Helpers';
+import { getAllListings, getSpecificListing } from '../../Helpers';
 
 const YourListingsPage = ({ token, email }) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
 
   const [listings, setListings] = useState([]);
-  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const updateListings = async () => {
@@ -48,25 +47,40 @@ const YourListingsPage = ({ token, email }) => {
     updateListings();
   }, []);
 
+  if (token === null) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="80vh"
+      >
+        <>
+          You are not logged in.
+        </>
+      </Box>
+    );
+  }
+
   return (
     <>
-      <div>
+      <>
         <Button sx={{ marginTop: '1em' }}
           variant="contained"
           component={Link}
           to='/createListing'>
           Create Listing
         </Button>
-      </div>
+      </>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
         {listings.map((listing, idx) => (
           <Listing
             key={idx}
             listing={listing}
           />
         ))}
-      </div>
+      </Box>
 
       <BasicModal open={open} setOpen={setOpen} content={content}>
       </BasicModal>
