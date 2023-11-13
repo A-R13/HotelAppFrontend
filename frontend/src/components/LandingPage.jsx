@@ -13,7 +13,6 @@ const LandingPage = (props) => {
   const [allListings, setAllListings] = useState([])
   const [bookings, setBookings] = useState([])
   const [filter, setFilter] = useState(false)
-  // eslint-disable-next-line no-unused-vars
   const [filteredListings, setFilteredListings] = useState([])
 
   // Get all listings when the page is loaded

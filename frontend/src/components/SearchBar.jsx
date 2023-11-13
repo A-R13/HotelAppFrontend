@@ -1,12 +1,4 @@
 import React from 'react';
-// import styled from 'styled-components';
-// import { CTA } from '../../styles-lib/buttons';
-// import { TLVBox } from '../../styles-lib/containers';
-// import { flexbox } from '../../styles-lib/mixins';
-// import { Title } from '../../styles-lib/typography';
-// import LocationInput from './LocationInput';
-// import GuestsMenu from './GuestsMenu';
-// import DatesSelection from './DatesSelection';
 import Slider from '@mui/material/Slider';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -145,58 +137,3 @@ const SearchPanel = (props) => {
 };
 
 export default SearchPanel;
-
-/* <TextField
-        id = 'filled-basic'
-        label = 'Where to'
-        variant = 'filled'
-        value = {dest}
-        onChange={e => setDest(e.target.value)}
-        ></TextField>
-        <h2 style={{ textAlign: 'left' }}>Price:</h2>
-        <Box sx={{ width: 300 }}>
-          <Slider
-            min={0}
-            max={1000}
-            getAriaLabel={() => 'Price'}
-            value={price}
-            onChange={e => setPrice(e.target.value)}
-            valueLabelDisplay="auto"
-          />
-        </Box>
-        <h2 style={{ textAlign: 'left' }}>Number of Bedrooms:</h2>
-        <Box sx={{ width: 300 }}>
-          <Slider
-          min={0}
-          max={10}
-          getAriaLabel={() => 'Bedrooms'}
-          value={beds}
-          onChange={e => setBeds(e.target.value)}
-          valueLabelDisplay="auto"
-          />
-        </Box>
-        <InputLabel id="demo-simple-select-label" style = {{ textAlign: 'left', fontSize: '1.5rem' }}>Reviews</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            style = {{ width: '50%' }}
-            value={review}
-            label="Reviews"
-            onChange={e => setReviews(e.target.value)}
-          >
-            <MenuItem value={1} >Lowest To Highest</MenuItem>
-            <MenuItem value={2}>Highest To Lowest</MenuItem>
-          </Select>
-          <div className='date-picker'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Check-in" />
-              </DemoContainer>
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Check-out" />
-              </DemoContainer>
-            </LocalizationProvider>
-          </div>
-        <Button className = 'search-submit'onClick= { () => { filterListings(props.allListings) }}>search</Button> */
