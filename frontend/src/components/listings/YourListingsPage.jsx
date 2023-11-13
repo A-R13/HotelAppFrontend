@@ -11,39 +11,37 @@ const YourListingsPage = ({ token, email }) => {
 
   const [listings, setListings] = useState([]);
 
-  useEffect(() => {
-    const updateListings = async () => {
-      const data = await getAllListings();
+  const updateListings = async () => {
+    const data = await getAllListings();
 
-      let myListings = [];
-      if (data.listings) {
-        // extract the users listings
-        const allListings = data.listings;
-        myListings = allListings.filter((listing) => listing.owner === email);
+    let myListings = [];
+    if (data.listings) {
+      // extract the users listings
+      const allListings = data.listings;
+      myListings = allListings.filter((listing) => listing.owner === email);
 
-        const listingsToShow = [];
+      const listingsToShow = [];
 
-        const getListingInfo = async (listing) => {
-          const updatedListingInfo = await getSpecificListing(listing.id, token);
-          // console.log(updatedListingInfo);
-          if (updatedListingInfo.listing) {
-            updatedListingInfo.listing.id = listing.id;
-            listingsToShow.push(updatedListingInfo.listing);
-          }
+      const getListingInfo = async (listing) => {
+        const updatedListingInfo = await getSpecificListing(listing.id, token);
+        // console.log(updatedListingInfo);
+        if (updatedListingInfo.listing) {
+          updatedListingInfo.listing.id = listing.id;
+          listingsToShow.push(updatedListingInfo.listing);
         }
-
-        const arrayOfAsyncs = myListings.map((listing) => getListingInfo(listing))
-
-        await Promise.all(arrayOfAsyncs);
-        setListings(listingsToShow);
-      } else {
-        setOpen(true);
-        setContent(data);
-        // setLoading(true);
       }
-      // setLoading(false);
-    };
 
+      const arrayOfAsyncs = myListings.map((listing) => getListingInfo(listing))
+
+      await Promise.all(arrayOfAsyncs);
+      setListings(listingsToShow);
+    } else {
+      setOpen(true);
+      setContent(data);
+    }
+  };
+
+  useEffect(() => {
     updateListings();
   }, []);
 
@@ -77,13 +75,14 @@ const YourListingsPage = ({ token, email }) => {
         {listings.map((listing, idx) => (
           <Listing
             key={idx}
+            token={token}
             listing={listing}
+            updateListings={() => updateListings()}
           />
         ))}
       </Box>
 
-      <BasicModal open={open} setOpen={setOpen} content={content}>
-      </BasicModal>
+      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
     </>
   );
 }
