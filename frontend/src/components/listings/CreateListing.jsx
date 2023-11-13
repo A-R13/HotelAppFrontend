@@ -54,7 +54,8 @@ const CreateListing = (props) => {
     const metadata = {
       propertyType,
       numBathrooms,
-      numBeds
+      numBeds,
+      bedrooms
     };
 
     let thumbnailUrl = '';
