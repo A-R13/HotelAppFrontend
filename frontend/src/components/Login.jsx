@@ -6,7 +6,7 @@ const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPage, setErrorPage] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState('')
+  const [errorMsg, setErrorMsg] = React.useState('');
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -28,21 +28,23 @@ const Login = (props) => {
       setErrorPage(true);
     } else if (data.token) {
       props.setToken(data.token);
+      props.setEmail(email);
       navigate('/');
     }
   }
 
   return (
     <>
-    {errorPage === true
-      ? (
-      <>
-        <Stack sx={{ width: '100%' }} spacing={2}>
-        <Alert severity="error"> {errorMsg} </Alert>
-        </Stack>
-      </>
-        )
-      : <></>}
+      {errorPage === true
+        ? (
+          <>
+            <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="error"> {errorMsg} </Alert>
+            </Stack>
+          </>
+          )
+        : <></>
+      }
       <Container maxWidth="sm" style={{ marginTop: '5em' }}>
         <Paper elevation={3} style={{ padding: '20px' }}>
           <Typography variant="h4" align="center">Login</Typography>

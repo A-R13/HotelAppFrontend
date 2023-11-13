@@ -46,6 +46,7 @@ const Register = (props) => {
     } else if (data.token) {
       console.log(data.token);
       props.setToken(data.token);
+      props.setEmail(email);
       navigate('/');
     }
   };
