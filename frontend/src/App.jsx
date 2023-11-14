@@ -12,14 +12,19 @@ import SingleListing from './components/SingleListing.jsx';
 function App () {
   const [token, setToken] = React.useState(null);
   const [email, setEmail] = React.useState('');
+  const [dateFilter, setDateFilter] = React.useState(false)
+  const [checkIn, setCheckIn] = React.useState('')
+  const [checkOut, setCheckOut] = React.useState('')
 
   return (
     <>
       <Router>
       <Navbar token={token} setToken={setToken}/>
       <Routes>
-        <Route path = "/" element={<LandingPage token = {token}/>}/>
-        <Route path = ":listingId" element={<SingleListing/>}/>
+        <Route path = "/" element={<LandingPage token = {token} dateFilter = {dateFilter} setDateFilter = {setDateFilter}
+        setCheckIn = {setCheckIn} setCheckOut = {setCheckOut}/>}/>
+        <Route path = ":listingId" element={<SingleListing token = {token} dateFilter = {dateFilter}
+        checkIn = {checkIn} checkOut = {checkOut} />}/>
         <Route path = "/register"
           element={
             <Register token = {token} setToken = {setToken}

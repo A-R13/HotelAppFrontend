@@ -18,6 +18,7 @@ const LandingPage = (props) => {
 
   // Get all listings when the page is loaded
   useEffect(() => {
+    props.setDateFilter(false)
     fetch('http://localhost:5005/listings', {
       method: 'GET',
       headers: {
@@ -30,7 +31,7 @@ const LandingPage = (props) => {
         for (const listing of allListings.listings) {
           const info = await getSpecificListing(listing.id)
           console.log(info.listing.published)
-          if (info.listing.published === true) {
+          if (info.listing.published !== true) {
             info.listing.id = listing.id
             listings.push(info.listing)
           }
@@ -72,7 +73,8 @@ const LandingPage = (props) => {
     <>
     <h1 className = 'text-3xl font-bold underline'>Listings</h1>
     <SearchBar allListings = {allListings} filter = {filter}
-    setFilter = {setFilter} setFilteredListings = {setFilteredListings}/>
+    setFilter = {setFilter} setFilteredListings = {setFilteredListings}
+    setDateFilter = {props.setDateFilter} setCheckIn = {props.setCheckIn} setCheckOut = {props.setCheckOut} />
     {filter === true
       ? (<>
       {
