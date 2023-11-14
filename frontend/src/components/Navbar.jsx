@@ -28,8 +28,10 @@ const Navbar = (props) => {
       // show modal
       setOpen(true);
       setContent(data.error);
+    } else {
+      props.setToken(null);
+      navigate('/');
     }
-    navigate('/');
   };
 
   return (
