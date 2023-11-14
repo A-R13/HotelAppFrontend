@@ -7,6 +7,7 @@ import LandingPage from './components/LandingPage.jsx';
 import YourListingsPage from './components/listings/YourListingsPage.jsx';
 import CreateListing from './components/listings/CreateListing.jsx';
 import EditListing from './components/listings/EditListing.jsx';
+import SingleListing from './components/SingleListing.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);
@@ -18,6 +19,7 @@ function App () {
       <Navbar token={token} setToken={setToken}/>
       <Routes>
         <Route path = "/" element={<LandingPage token = {token}/>}/>
+        <Route path = ":listingId" element={<SingleListing/>}/>
         <Route path = "/register"
           element={
             <Register token = {token} setToken = {setToken}

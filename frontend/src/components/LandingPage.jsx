@@ -8,6 +8,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { getSpecificListing } from '../Helpers.js';
 
 const LandingPage = (props) => {
   const [allListings, setAllListings] = useState([])
@@ -24,8 +25,17 @@ const LandingPage = (props) => {
       },
     })
       .then((res) => res.json())
-      .then((allListings) => {
-        setAllListings(allListings.listings)
+      .then(async (allListings) => {
+        const listings = []
+        for (const listing of allListings.listings) {
+          const info = await getSpecificListing(listing.id)
+          console.log(info.listing.published)
+          if (info.listing.published === true) {
+            info.listing.id = listing.id
+            listings.push(info.listing)
+          }
+        }
+        setAllListings(listings)
       })
   }, []);
 
@@ -45,6 +55,7 @@ const LandingPage = (props) => {
   }, []);
 
   // Sort alhabetically
+  console.log(allListings)
   allListings.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1)
   // If user is logged in sort users own bokoing by pending booked etc.
   if (props.token !== null) {
