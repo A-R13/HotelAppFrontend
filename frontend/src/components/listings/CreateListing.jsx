@@ -4,8 +4,10 @@ import { Button, TextField, Container, Paper, Grid, Typography, styled } from '@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import BasicModal from '../BasicModal.jsx';
 import { fileToDataUrl } from '../../Helpers.js';
+import InputDropdown from '../InputDropdown.jsx';
+import AmenitiesCheckboxes from '../AmenitiesCheckboxes.jsx';
 
-// taken from mui
+// This is needed for the mui component VisuallyHidden Input
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -20,10 +22,8 @@ const VisuallyHiddenInput = styled('input')({
 
 const CreateListing = (props) => {
   const navigate = useNavigate();
-
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
-
   const [title, setTitle] = useState('');
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
@@ -34,7 +34,16 @@ const CreateListing = (props) => {
   const [numBathrooms, setNumBathrooms] = useState(0);
   const [bedrooms, setBedrooms] = useState(0);
   const [numBeds, setNumBeds] = useState(0);
-  const [amenities, setAmenities] = useState('');
+  const [amenities, setAmenities] = useState([]);
+
+  const propertyOptions = ['House', 'Apartment', 'Hotel'];
+  const handlePropertyTypeChange = (e) => {
+    setPropertyType(e.target.value);
+  };
+
+  const handleAmenitiesChange = (selectedAmenities) => {
+    setAmenities(selectedAmenities);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +64,8 @@ const CreateListing = (props) => {
       propertyType,
       numBathrooms,
       numBeds,
-      bedrooms
+      bedrooms,
+      amenities
     };
 
     let thumbnailUrl = '';
@@ -155,7 +165,9 @@ const CreateListing = (props) => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                <Button component="label" variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                >
                   Upload Listing Thumbnail
                   <VisuallyHiddenInput
                     type="file"
@@ -165,14 +177,11 @@ const CreateListing = (props) => {
                 </Button>
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  fullWidth
+                <InputDropdown
                   label="Property Type"
-                  name='propertyType'
-                  type='text'
+                  options={propertyOptions}
                   value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  required
+                  onChange={(e) => handlePropertyTypeChange(e)}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -209,14 +218,12 @@ const CreateListing = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Amenities"
-                  name='amenities'
-                  type='text'
-                  value={amenities}
-                  onChange={(e) => setAmenities(e.target.value)}
-                  required
+                <Typography variant="h6">
+                  Select Amenities
+                </Typography>
+                <AmenitiesCheckboxes
+                  selectedAmenities={amenities}
+                  onChange={handleAmenitiesChange}
                 />
               </Grid>
             </Grid>
@@ -234,8 +241,7 @@ const CreateListing = (props) => {
           </form>
         </Paper>
       </Container>
-      <BasicModal open={open} setOpen={setOpen} content={content}>
-      </BasicModal>
+      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
     </>
   );
 }
