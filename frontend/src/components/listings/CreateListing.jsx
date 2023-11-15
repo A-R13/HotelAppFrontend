@@ -65,8 +65,8 @@ const CreateListing = (props) => {
       numBathrooms,
       numBeds,
       bedrooms,
+      amenities,
       propertyImages: [],
-      amenities
     };
 
     let thumbnailUrl = '';

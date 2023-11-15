@@ -89,6 +89,9 @@ const SingleListing = (props) => {
     if (booking.error) {
       setOpen(true)
       setContent(booking.error)
+    } else if (checkIn < listingInfo.availability.start || checkout > listingInfo.availability.end) {
+      setOpen(true)
+      setContent('Listing is not available between' + `${checkIn.$D}/${checkIn.$M}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M}/${checkout.$y}`)
     } else {
       setConfirmation(true)
       setConfirmationMsg('Booking from ' + `${checkIn.$D}/${checkIn.$M}/${checkIn.$y}` + ' to ' + `${checkout.$D}/${checkout.$M}/${checkout.$y}` + ' has been succesful.')
