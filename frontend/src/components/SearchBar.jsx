@@ -16,6 +16,8 @@ const SearchPanel = (props) => {
   const [price, setPrice] = React.useState([0, 0]);
   const [beds, setBeds] = React.useState([0, 0])
   const [review, setReviews] = React.useState('')
+  const [checkout, setCheckOut] = React.useState('')
+  const [checkIn, setCheckIn] = React.useState('')
 
   const getListingDetails = async (listingId) => {
     const response = await getSpecificListing(listingId)
@@ -30,12 +32,14 @@ const SearchPanel = (props) => {
         listing.title.toLowerCase().includes(dest.toLowerCase()) ||
         listing.address.city.toLowerCase().includes(dest.toLowerCase()))
       props.setFilter(true)
+      props.setDateFilter(false)
       props.setFilteredListings(filteredArray)
     } else if (price[0] !== 0 || price[1] !== 0) {
       const filteredArray = listing.filter((item) =>
         item.price >= price[0] && item.price <= price[1]);
       console.log(filteredArray)
       props.setFilter(true)
+      props.setDateFilter(false)
       props.setFilteredListings(filteredArray)
     } else if ((beds[0] !== 0 || beds[1] !== 0)) {
       const filteredArray = []
@@ -48,8 +52,14 @@ const SearchPanel = (props) => {
         }
       }
       props.setFilter(true)
+      props.setDateFilter(false)
       props.setFilteredListings(filteredArray)
+    } else if (checkout !== '' || checkIn !== '') {
+      props.setDateFilter(true)
+      props.setCheckIn(checkIn)
+      props.setCheckOut(checkout)
     } else {
+      props.setDateFilter(false)
       props.setFilter(false)
     }
     // else if () {  IMPLEMENT SORT BY REVIEWS AND AVAILABILITY
@@ -115,14 +125,14 @@ const SearchPanel = (props) => {
               <Grid item xs={6} >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={['DatePicker']}>
-                    <DatePicker label="Check-in" />
+                    <DatePicker label="Check-in"value={checkIn} onChange={(newValue) => setCheckIn(newValue)} />
                   </DemoContainer>
                 </LocalizationProvider>
               </Grid>
               <Grid item xs = {6} >
                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer components={['DatePicker']}>
-                    <DatePicker label="Check-out" />
+                    <DatePicker label="Check-out" value={checkout} onChange={(newValue) => setCheckOut(newValue)}/>
                   </DemoContainer>
                 </LocalizationProvider>
               </Grid>

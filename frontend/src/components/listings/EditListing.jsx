@@ -68,7 +68,9 @@ const EditListing = ({ token }) => {
       propertyType,
       numBathrooms,
       numBeds,
-      propertyImages
+      bedrooms,
+      propertyImages,
+      amenities
     };
 
     // convert thumbnail url from file to url

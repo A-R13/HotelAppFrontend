@@ -8,6 +8,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { getSpecificListing } from '../Helpers.js';
 
 const LandingPage = (props) => {
   const [allListings, setAllListings] = useState([])
@@ -17,6 +18,7 @@ const LandingPage = (props) => {
 
   // Get all listings when the page is loaded
   useEffect(() => {
+    props.setDateFilter(false)
     fetch('http://localhost:5005/listings', {
       method: 'GET',
       headers: {
@@ -24,8 +26,17 @@ const LandingPage = (props) => {
       },
     })
       .then((res) => res.json())
-      .then((allListings) => {
-        setAllListings(allListings.listings)
+      .then(async (allListings) => {
+        const listings = []
+        for (const listing of allListings.listings) {
+          const info = await getSpecificListing(listing.id)
+          console.log(info.listing.published)
+          if (info.listing.published !== false) {
+            info.listing.id = listing.id
+            listings.push(info.listing)
+          }
+        }
+        setAllListings(listings)
       })
   }, []);
 
@@ -45,6 +56,7 @@ const LandingPage = (props) => {
   }, []);
 
   // Sort alhabetically
+  console.log(allListings)
   allListings.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1)
   // If user is logged in sort users own bokoing by pending booked etc.
   if (props.token !== null) {
@@ -61,7 +73,8 @@ const LandingPage = (props) => {
     <>
     <h1 className = 'text-3xl font-bold underline'>Listings</h1>
     <SearchBar allListings = {allListings} filter = {filter}
-    setFilter = {setFilter} setFilteredListings = {setFilteredListings}/>
+    setFilter = {setFilter} setFilteredListings = {setFilteredListings}
+    setDateFilter = {props.setDateFilter} setCheckIn = {props.setCheckIn} setCheckOut = {props.setCheckOut} />
     {filter === true
       ? (<>
       {
