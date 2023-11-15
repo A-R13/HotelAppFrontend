@@ -1,8 +1,9 @@
 import { Button } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar.jsx'
 // import { fileToDataUrl } from '../Helpers';
+import BasicModal from './BasicModal.jsx';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,13 +12,14 @@ import Typography from '@mui/material/Typography';
 import { getSpecificListing } from '../Helpers.js';
 
 const LandingPage = (props) => {
-  const [allListings, setAllListings] = useState([])
-  const [bookings, setBookings] = useState([])
-  const [filter, setFilter] = useState(false)
-  const [filteredListings, setFilteredListings] = useState([])
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState('');
+  const [allListings, setAllListings] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [filter, setFilter] = useState(false);
+  const [filteredListings, setFilteredListings] = useState([]);
 
-  // Get all listings when the page is loaded
-  useEffect(() => {
+  const fetchListings = () => {
     props.setDateFilter(false)
     fetch('http://localhost:5005/listings', {
       method: 'GET',
@@ -27,16 +29,21 @@ const LandingPage = (props) => {
     })
       .then((res) => res.json())
       .then(async (allListings) => {
-        const listings = []
+        const listings = [];
         for (const listing of allListings.listings) {
-          const info = await getSpecificListing(listing.id)
+          const info = await getSpecificListing(listing.id);
           if (info.listing.published !== false) {
-            info.listing.id = listing.id
-            listings.push(info.listing)
+            info.listing.id = listing.id;
+            listings.push(info.listing);
           }
         }
-        setAllListings(listings)
+        setAllListings(listings);
       })
+  };
+
+  // Get all listings when the page is loaded
+  useEffect(() => {
+    fetchListings();
   }, []);
 
   useEffect(() => {
@@ -49,7 +56,7 @@ const LandingPage = (props) => {
         },
       }).then((res) => res.json())
         .then((userBookings) => {
-          setBookings(userBookings.bookings)
+          setBookings(userBookings.bookings);
         })
     }
   }, []);
@@ -66,15 +73,39 @@ const LandingPage = (props) => {
       }
     }
   }
+
+  const handleRemove = async (e, listingId) => {
+    e.preventDefault();
+    const response = await fetch(`http://localhost:5005/listings/unpublish/${listingId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${props.token}`,
+      }
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      // if error, show error popup. else go to listings page
+      setOpen(true);
+      setContent(data.error);
+    } else {
+      // go to listings page
+      // reload the listings
+      console.log('listing removed');
+      fetchListings();
+    }
+  };
+
   return (
     <>
-    <h1 className = 'text-3xl font-bold underline'>Listings</h1>
-    <SearchBar allListings = {allListings} filter = {filter}
-    setFilter = {setFilter} setFilteredListings = {setFilteredListings}
-    setDateFilter = {props.setDateFilter} setCheckIn = {props.setCheckIn} setCheckOut = {props.setCheckOut} />
-    {filter === true
-      ? (<>
-      {
+      <h1 className = 'text-3xl font-bold underline'>Listings</h1>
+      <SearchBar allListings = {allListings} filter = {filter}
+      setFilter = {setFilter} setFilteredListings = {setFilteredListings}
+      setDateFilter = {props.setDateFilter} setCheckIn = {props.setCheckIn} setCheckOut = {props.setCheckOut} />
+      {filter === true
+        ? (<>
+        {
         filteredListings.map((listing) => (
           <Button
             key = {listing.id}
@@ -102,10 +133,11 @@ const LandingPage = (props) => {
                 </Typography>
               </CardActions>
             </Card>
+            <Button onClick={(e) => handleRemove(e, listing.id)}>Remove</Button>
           </Button>
         ))}
         </>)
-      : <>{
+        : <>{
         allListings.map((listing) => (
           <Button
             key = {listing.id}
@@ -133,9 +165,12 @@ const LandingPage = (props) => {
                   {listing.reviews.length + ' reviews'}
                 </Typography>
               </CardActions>
+              <Button onClick={(e) => handleRemove(e, listing.id)}>Remove</Button>
             </Card>
           </Button>
         ))}</> }
+      <BasicModal open={open} setOpen={setOpen} content={content}>
+      </BasicModal>
     </>
   );
 }
