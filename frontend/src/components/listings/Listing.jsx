@@ -4,8 +4,14 @@ import SVGRating from '../SVGRating';
 import Image from '../Image';
 import { Link } from 'react-router-dom';
 import BasicModal from '../BasicModal';
+import AvailabilityModal from '../AvailabilityModal';
 
 const Listing = (props) => {
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
+  const openAvailabilityModal = () => {
+    setIsAvailabilityModalOpen(true);
+  };
+
   const listingInfo = props.listing;
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
@@ -58,6 +64,12 @@ const Listing = (props) => {
       <Typography>Price per Night: ${price}</Typography>
       <Button component={Link} to={`/editListing/${listingId}`}>Edit</Button>
       <Button onClick={() => handleDelete()}>Delete</Button>
+      <Button onClick={() => openAvailabilityModal()}>Go Live</Button>
+      {isAvailabilityModalOpen &&
+        <AvailabilityModal
+          onClose={() => setIsAvailabilityModalOpen(false)}
+        />
+      }
       <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
     </div>
   );
