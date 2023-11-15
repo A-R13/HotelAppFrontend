@@ -62,7 +62,8 @@ export const getUserBookingsForListing = async (token, userEmail, listingId) => 
   return userBookings;
 }
 
-export const makeBooking = async (token, listingId, totalPrice, start, end) => {
+export const makeBookingOnListing = async (token, listingId, price, start, end, nights) => {
+  const totalPrice = price * nights;
   const bookingInfo = JSON.stringify({
     dateRange: { start, end },
     totalPrice,
@@ -77,4 +78,20 @@ export const makeBooking = async (token, listingId, totalPrice, start, end) => {
   });
   const booking = await response.json();
   return booking
+}
+
+export const makeReviewOnListing = async (token, listingId, bookingId, comment, score) => {
+  const reviewObj = JSON.stringify({
+    review: { comment, score }
+  })
+  const response = await fetch(`http://localhost:5005/listings/${listingId}/review/${bookingId}`, {
+    method: 'PUT',
+    body: reviewObj,
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+  })
+  const review = await response.json()
+  return review
 }

@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar.jsx'
+import SearchBar from '../components/SearchBar.jsx'
 // import { fileToDataUrl } from '../Helpers';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
