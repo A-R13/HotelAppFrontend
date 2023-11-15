@@ -22,9 +22,9 @@ function App () {
       <Navbar token={token} setToken={setToken}/>
       <Routes>
         <Route path = "/" element={<LandingPage token = {token} dateFilter = {dateFilter} setDateFilter = {setDateFilter}
-        setCheckIn = {setCheckIn} setCheckOut = {setCheckOut}/>}/>
+        setCheckIn = {setCheckIn} setCheckOut = {setCheckOut} />}/>
         <Route path = ":listingId" element={<SingleListing token = {token} dateFilter = {dateFilter}
-        checkIn = {checkIn} checkOut = {checkOut} />}/>
+        checkIn = {checkIn} checkOut = {checkOut} email = {email}/>}/>
         <Route path = "/register"
           element={
             <Register token = {token} setToken = {setToken}

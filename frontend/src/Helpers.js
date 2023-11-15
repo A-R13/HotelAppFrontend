@@ -1,4 +1,5 @@
 // HELPER FUNCTION TO CONVERT FILE INTO URL FOR THUMBNAIL
+
 export const fileToDataUrl = (file) => {
   const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
   const valid = validFileTypes.find((type) => type === file.type);
@@ -39,4 +40,41 @@ export const getSpecificListing = async (listingId, token) => {
 
   const data = await response.json();
   return data;
+}
+
+export const getUserBookingsForListing = async (token, userEmail, listingId) => {
+  const response = await fetch('http://localhost:5005/bookings', {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+  });
+
+  const data = await response.json();
+  const userBookings = []
+
+  for (const booking of data.bookings) {
+    if (booking.owner === userEmail && booking.listingId === listingId) {
+      userBookings.push(booking)
+    }
+  }
+  return userBookings;
+}
+
+export const makeBooking = async (token, listingId, totalPrice, start, end) => {
+  const bookingInfo = JSON.stringify({
+    dateRange: { start, end },
+    totalPrice,
+  });
+  const response = await fetch(`http://localhost:5005/bookings/new/${listingId}`, {
+    method: 'POST',
+    body: bookingInfo,
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  const booking = await response.json();
+  return booking
 }

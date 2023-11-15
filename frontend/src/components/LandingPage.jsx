@@ -31,7 +31,7 @@ const LandingPage = (props) => {
         for (const listing of allListings.listings) {
           const info = await getSpecificListing(listing.id)
           console.log(info.listing.published)
-          if (info.listing.published !== true) {
+          if (info.listing.published !== false) {
             info.listing.id = listing.id
             listings.push(info.listing)
           }
