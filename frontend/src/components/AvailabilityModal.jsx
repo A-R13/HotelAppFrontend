@@ -9,8 +9,10 @@ import {
   TextField,
   InputLabel
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const AvailabilityModal = ({ onClose }) => {
+const AvailabilityModal = ({ onClose, token, listingInfo }) => {
+  const nagivate = useNavigate();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
 
@@ -87,7 +89,7 @@ const AvailabilityModal = ({ onClose }) => {
     return aggregatedAvailabilities;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // check to see if any dates were not inputted/empty dates
     const isDateEmpty = availabilities.some(
       (availability) => !availability.start || !availability.end
@@ -100,62 +102,85 @@ const AvailabilityModal = ({ onClose }) => {
     }
 
     const finalAvailabilities = aggregateAvailabilities();
-    console.log(finalAvailabilities);
 
-    // close the modal after submitting
-    // call fetch to publish the listing
-    // nagivate to /
+    const availabilityObj = {
+      availability: finalAvailabilities
+    }
+    const listingId = listingInfo.id;
+    const response = await fetch(`http://localhost:5005/listings/publish/${listingId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(availabilityObj)
+    });
 
+    const data = await response.json();
+    console.log(data);
+    if (data.error) {
+      // if error, show error popup. else go to listings page
+      setOpen(true);
+      setContent(data.error);
+      return;
+    } else {
+      console.log('going to mainpage');
+      nagivate('/');
+    }
+
+    // close the availability modal
     onClose();
   };
 
   return (
-    <Dialog open={true} onClose={onClose}>
-      <DialogTitle>Enter Availabilities</DialogTitle>
-      <DialogContent>
-        {availabilities.map((availability, idx) => (
-          <Fragment key={idx}>
-            <InputLabel shrink htmlFor={`start-date-${idx}`}>
-              {`Start date ${idx + 1}`}
-            </InputLabel>
-            <TextField
-              id={`start-date-${idx}`}
-              type="date"
-              fullWidth
-              value={availability.start}
-              onChange={(e) => handleDateChange(idx, 'start', e.target.value)}
-              required
-            />
-            <InputLabel shrink htmlFor={`end-date-${idx}`}>
-              {`End Date ${idx + 1}`}
-            </InputLabel>
-            <TextField
-              id={`end-date-${idx}`}
-              type="date"
-              fullWidth
-              value={availability.end}
-              onChange={(e) => handleDateChange(idx, 'end', e.target.value)}
-              required
-            />
-          </Fragment>
-        ))}
-        <Button variant="outlined" onClick={() => handleAddAvailability()}>
-          Add Availability
-        </Button>
-        <Button variant="outlined" onClick={() => handleRemoveAvailability()}>
-          Remove Availability
-        </Button>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => handleSubmit()} color="primary">
-          Submit
-        </Button>
-        <Button onClick={onClose} color="secondary">
-          Cancel
-        </Button>
-      </DialogActions>
-      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
-    </Dialog>
+    <Fragment>
+      <Dialog open={true} onClose={onClose}>
+        <DialogTitle>Enter Availabilities</DialogTitle>
+        <DialogContent>
+          {availabilities.map((availability, idx) => (
+            <Fragment key={idx}>
+              <InputLabel shrink htmlFor={`start-date-${idx}`}>
+                {`Start date ${idx + 1}`}
+              </InputLabel>
+              <TextField
+                id={`start-date-${idx}`}
+                type="date"
+                fullWidth
+                value={availability.start}
+                onChange={(e) => handleDateChange(idx, 'start', e.target.value)}
+                required
+              />
+              <InputLabel shrink htmlFor={`end-date-${idx}`}>
+                {`End Date ${idx + 1}`}
+              </InputLabel>
+              <TextField
+                id={`end-date-${idx}`}
+                type="date"
+                fullWidth
+                value={availability.end}
+                onChange={(e) => handleDateChange(idx, 'end', e.target.value)}
+                required
+              />
+            </Fragment>
+          ))}
+          <Button variant="outlined" onClick={() => handleAddAvailability()}>
+            Add Availability
+          </Button>
+          <Button variant="outlined" onClick={() => handleRemoveAvailability()}>
+            Remove Availability
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleSubmit()} color="primary">
+            Submit
+          </Button>
+          <Button onClick={onClose} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <BasicModal open={open} setOpen={() => setOpen()} content={content}></BasicModal>
+    </Fragment>
   );
 };
 

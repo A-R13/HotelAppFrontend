@@ -68,6 +68,8 @@ const Listing = (props) => {
       {isAvailabilityModalOpen &&
         <AvailabilityModal
           onClose={() => setIsAvailabilityModalOpen(false)}
+          token={props.token}
+          listingInfo={listingInfo}
         />
       }
       <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>

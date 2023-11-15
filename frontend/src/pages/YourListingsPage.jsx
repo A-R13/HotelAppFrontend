@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import BasicModal from '../BasicModal';
-import Listing from './Listing';
-import { getAllListings, getSpecificListing } from '../../Helpers';
+import BasicModal from '../components/BasicModal';
+import Listing from '../components/listings/Listing';
+import { getAllListings, getSpecificListing } from '../Helpers';
 
 const YourListingsPage = ({ token, email }) => {
   const [open, setOpen] = useState(false);

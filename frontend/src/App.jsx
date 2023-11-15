@@ -1,11 +1,11 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
-import Register from './components/Register.jsx';
+import Register from './pages/Register.jsx';
 import Navbar from './components/Navbar.jsx';
-import Login from './components/Login.jsx';
+import Login from './pages/Login.jsx';
 import LandingPage from './components/LandingPage.jsx';
-import YourListingsPage from './components/listings/YourListingsPage.jsx';
-import CreateListing from './components/listings/CreateListing.jsx';
+import YourListingsPage from './pages/YourListingsPage.jsx';
+import CreateListing from './pages/CreateListing.jsx';
 import EditListing from './components/listings/EditListing.jsx';
 import SingleListing from './components/SingleListing.jsx';
 
