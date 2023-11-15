@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, TextField, Container, Paper, Grid, Typography, styled } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import BasicModal from '../BasicModal.jsx';
-import { fileToDataUrl } from '../../Helpers.js';
-import InputDropdown from '../InputDropdown.jsx';
-import AmenitiesCheckboxes from '../AmenitiesCheckboxes.jsx';
+import BasicModal from '../components/BasicModal.jsx';
+import { fileToDataUrl } from '../Helpers.js';
+import InputDropdown from '../components/InputDropdown.jsx';
+import AmenitiesCheckboxes from '../components/AmenitiesCheckboxes.jsx';
 
 // This is needed for the mui component VisuallyHidden Input
 const VisuallyHiddenInput = styled('input')({

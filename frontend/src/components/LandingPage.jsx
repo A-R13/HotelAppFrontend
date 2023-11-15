@@ -30,7 +30,6 @@ const LandingPage = (props) => {
         const listings = []
         for (const listing of allListings.listings) {
           const info = await getSpecificListing(listing.id)
-          console.log(info.listing.published)
           if (info.listing.published !== false) {
             info.listing.id = listing.id
             listings.push(info.listing)
@@ -56,7 +55,6 @@ const LandingPage = (props) => {
   }, []);
 
   // Sort alhabetically
-  console.log(allListings)
   allListings.sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1)
   // If user is logged in sort users own bokoing by pending booked etc.
   if (props.token !== null) {
@@ -68,7 +66,6 @@ const LandingPage = (props) => {
       }
     }
   }
-  console.log(filter)
   return (
     <>
     <h1 className = 'text-3xl font-bold underline'>Listings</h1>
