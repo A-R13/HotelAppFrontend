@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { getSpecificListing, getUserBookingsForListing, makeBooking } from '../Helpers';
+import { getSpecificListing, getUserBookingsForListing, makeBookingOnListing, makeReviewOnListing } from '../Helpers.js';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
@@ -19,8 +19,9 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import BasicModal from './BasicModal.jsx';
-import BookingConfirmation from './BookingConfirmation.jsx';
+import BasicModal from '../components/BasicModal.jsx';
+import BookingConfirmation from '../components/BookingConfirmation.jsx';
+import TextField from '@mui/material/TextField';
 
 const SingleListing = (props) => {
   const [open, setOpen] = useState(false);
@@ -39,14 +40,43 @@ const SingleListing = (props) => {
   const [checkout, setCheckOut] = React.useState('')
   const [checkIn, setCheckIn] = React.useState('')
 
+  const [userReview, setUserReview] = React.useState(0)
+  const [review, setReview] = React.useState(false)
+  const [reviewId, setReviewId] = React.useState()
+  const [reviewComment, setReviewComment] = React.useState('')
+  const [reviewScore, setReviewScore] = React.useState(0)
+
+  // Run intially
   useEffect(async () => {
     const info = await getSpecificListing(listingId)
     setListingInfo(info.listing)
     if (props.token) {
-      setBookings(getUserBookingsForListing(props.token, props.email, listingId))
+      setBookings(await getUserBookingsForListing(props.token, props.email, listingId))
+    }
+    for (const booking of bookings) {
+      if (booking.listingId === listingId && booking.status === 'accepted') {
+        setReview(true)
+        setReviewId(booking.id)
+      }
     }
     setLoading(false)
   }, [])
+
+  // Run everytime a user makes a review to refetch object and display reviews
+  useEffect(async () => {
+    const info = await getSpecificListing(listingId)
+    setListingInfo(info.listing)
+    if (props.token) {
+      setBookings(await getUserBookingsForListing(props.token, props.email, listingId))
+    }
+    for (const booking of bookings) {
+      if (booking.listingId === listingId && booking.status === 'accepted') {
+        setReview(true)
+        setReviewId(booking.id)
+      }
+    }
+    setLoading(false)
+  }, [userReview])
 
   useEffect(() => {
     const slideImages = [];
@@ -85,18 +115,45 @@ const SingleListing = (props) => {
       setContent('Invalid dates. Please Try again')
       return
     }
-    const booking = await makeBooking(props.token, listingId, listingInfo.price * nights, checkIn, checkout)
-    if (booking.error) {
+    const checkInDate = new Date(checkIn.$y, checkIn.$M, checkIn.$D).setHours(0, 0, 0, 0)
+    const checkoutDate = new Date(checkout.$y, checkout.$M, checkout.$D).setHours(0, 0, 0, 0)
+    for (const dates of listingInfo.availability) {
+      const validCheckin = new Date(dates.start).setHours(0, 0, 0, 0)
+      const validCheckout = new Date(dates.end).setHours(0, 0, 0, 0)
+      if (checkInDate >= validCheckin && checkoutDate <= validCheckout) {
+        const booking = await makeBookingOnListing(props.token, listingId, listingInfo.price, checkIn, checkout, nights)
+        if (booking.error) {
+          setOpen(true)
+          setContent(booking.error)
+          return
+        } else {
+          setConfirmation(true)
+          setConfirmationMsg('Booking from ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' to ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}` + ' has been succesful.')
+          return
+        }
+      }
+    }
+
+    setOpen(true)
+    setContent('Listing is not available between ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}`)
+  }
+
+  const makeReview = async () => {
+    if (reviewComment === '') {
       setOpen(true)
-      setContent(booking.error)
-    } else if (checkIn < listingInfo.availability.start || checkout > listingInfo.availability.end) {
+      setContent('Review Comment cannot be empty')
+      return;
+    }
+    const review = await makeReviewOnListing(props.token, listingId, reviewId, reviewComment, reviewScore)
+
+    if (review.error) {
       setOpen(true)
-      setContent('Listing is not available between' + `${checkIn.$D}/${checkIn.$M}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M}/${checkout.$y}`)
+      setContent(review.error)
     } else {
-      setConfirmation(true)
-      setConfirmationMsg('Booking from ' + `${checkIn.$D}/${checkIn.$M}/${checkIn.$y}` + ' to ' + `${checkout.$D}/${checkout.$M}/${checkout.$y}` + ' has been succesful.')
+      setUserReview(userReview + 1)
     }
   }
+
   const divStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -148,15 +205,6 @@ const SingleListing = (props) => {
           <AirlineSeatIndividualSuiteIcon fontSize='medium'/>: {listingInfo.metadata.numBeds} (beds)<br/>
           <BathroomIcon fontSize='medium'/>: {listingInfo.metadata.numBathrooms} (bathrooms)<br/>
         </Box>
-        {bookings && bookings.length > 0
-          ? (<>
-        {bookings.map((booking, index) => (
-          <div key = {index}>
-            Booking From {booking.dateRange.start} to {booking.dateRange.end}: {booking.status}
-          </div>
-        ))}
-        </>)
-          : (<></>)}
       </CardContent>
       <Stack spacing={1}>
           <Rating name="half-rating-read" defaultValue={rating} precision={0.5} readOnly /> ({listingInfo.reviews.length} reviews)
@@ -177,12 +225,39 @@ const SingleListing = (props) => {
             variant="solid"
             size="md"
             color="primary"
-            aria-label="Explore Bahamas Islands"
+            aria-label="Book Listing"
             sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
             onClick={makebooking}
             >
             Book
           </Button>
+          {review
+            ? (<>
+            <Stack spacing={1}>
+              <Rating name="half-rating" defaultValue={reviewScore} precision={0.5} onChange={(event, newValue) => setReviewScore(newValue)} />
+              <TextField id="outlined-basic" label="Outlined" variant="outlined" onChange={(e) => setReviewComment(e.target.value)} />
+              <Button
+                variant="solid"
+                size="md"
+                color="primary"
+                aria-label="Comment"
+                sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
+                onClick={makeReview}
+              >
+                Comment
+              </Button>
+            </Stack>
+          </>)
+            : (<> </>)}
+          {bookings && bookings.length > 0
+            ? (<> <h2>Bookings</h2>
+        {bookings.map((booking, index) => (
+          <div key = {index}>
+            Booking From {new Date(booking.dateRange.start).toDateString()} to {new Date(booking.dateRange.end).toDateString()}: {booking.status}
+          </div>
+        ))}
+        </>)
+            : (<></>)}
         </>)
         : (<></>) }
       {listingInfo.reviews.map((review) => (

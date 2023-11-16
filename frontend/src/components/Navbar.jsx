@@ -42,10 +42,10 @@ const Navbar = (props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Welcome to Airbrb!
             </Typography>
-            <Button color="inherit" component={Link} to="/">All listings</Button>
-            <Button color="inherit" component={Link} to="/yourListings">Your Listings</Button>
-            <Button color="inherit" component={Link} to="/register">Register</Button>
-            <Button color="inherit" component={Link} to="/login">Login</Button>
+            <Button aria-label="All Listings" color="inherit" component={Link} to="/">All listings</Button>
+            <Button aria-label="Your Listings"color="inherit" component={Link} to="/yourListings">Your Listings</Button>
+            <Button aria-label="Register" color="inherit" component={Link} to="/register">Register</Button>
+            <Button aria-label="Login" color="inherit" component={Link} to="/login">Login</Button>
             <Button color="inherit"
               component={Link}
               to="/"

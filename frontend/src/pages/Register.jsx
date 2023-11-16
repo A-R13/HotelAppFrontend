@@ -12,7 +12,9 @@ const Register = (props) => {
   const [name, setName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordCheck, setPasswordCheck] = React.useState('');
+  // eslint-disable-next-line no-unused-vars
   const [errorPage, setErrorPage] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [errorMsg, setErrorMsg] = React.useState('');
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ const Register = (props) => {
       setErrorMsg('Password must be atleast 6 characters. Please Try again.');
       setErrorPage(true);
       return;
-    } else if (name.length <= 1) {
+    } else if (name.length <= 1 || !name.replace(/\s/g, '').length) {
       setErrorMsg('Invalid Name. Please Try again.');
       setErrorPage(true);
       return;
@@ -53,7 +55,7 @@ const Register = (props) => {
 
   return (
     <>
-      {errorPage === true
+      {errorPage
         ? (
         <>
           <Stack sx={{ width: '100%' }} spacing={2}>
@@ -88,7 +90,12 @@ const Register = (props) => {
             <TextField id="outlined-basic" label="Confirm Password" variant="outlined" onChange={e => setPasswordCheck(e.target.value)}/>
           </Grid>
           <Grid xs={12}>
-            <Button variant="text" onClick={handleRegister} style = {{ textAlign: 'center' }}>Submit</Button>
+            <Button
+            variant="text"
+            onClick={handleRegister}
+            style = {{ textAlign: 'center' }}
+            aria-label="Register Submit"
+            >Submit</Button>
           </Grid>
         </Grid>
       </Box>

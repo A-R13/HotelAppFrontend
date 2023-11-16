@@ -179,6 +179,7 @@ const CreateListing = (props) => {
                 >
                   Upload Listing Thumbnail
                   <VisuallyHiddenInput
+                    aria-label="Upload Thumbnail"
                     type="file"
                     name="thumbnail"
                     onChange={(e) => setThumbnail(e.target.files[0])}
