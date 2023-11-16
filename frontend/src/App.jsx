@@ -3,11 +3,11 @@ import { Routes, Route, BrowserRouter as Router } from 'react-router-dom'
 import Register from './pages/Register.jsx';
 import Navbar from './components/Navbar.jsx';
 import Login from './pages/Login.jsx';
-import LandingPage from './components/LandingPage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 import YourListingsPage from './pages/YourListingsPage.jsx';
 import CreateListing from './pages/CreateListing.jsx';
 import EditListing from './components/listings/EditListing.jsx';
-import SingleListing from './components/SingleListing.jsx';
+import SingleListing from './pages/SingleListing.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);
