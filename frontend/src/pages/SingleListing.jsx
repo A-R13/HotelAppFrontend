@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { getSpecificListing, getUserBookingsForListing, makeBookingOnListing, makeReviewOnListing } from '../Helpers';
+import { getSpecificListing, getUserBookingsForListing, makeBookingOnListing, makeReviewOnListing } from '../Helpers.js';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
@@ -19,8 +19,8 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import BasicModal from './BasicModal.jsx';
-import BookingConfirmation from './BookingConfirmation.jsx';
+import BasicModal from '../components/BasicModal.jsx';
+import BookingConfirmation from '../components/BookingConfirmation.jsx';
 import TextField from '@mui/material/TextField';
 
 const SingleListing = (props) => {
@@ -117,19 +117,25 @@ const SingleListing = (props) => {
     }
     const checkInDate = new Date(checkIn.$y, checkIn.$M, checkIn.$D).setHours(0, 0, 0, 0)
     const checkoutDate = new Date(checkout.$y, checkout.$M, checkout.$D).setHours(0, 0, 0, 0)
-    const validCheckin = new Date(listingInfo.availability[0].start).setHours(0, 0, 0, 0)
-    const validCheckout = new Date(listingInfo.availability[0].end).setHours(0, 0, 0, 0)
-    const booking = await makeBookingOnListing(props.token, listingId, listingInfo.price, checkIn, checkout, nights)
-    if (booking.error) {
-      setOpen(true)
-      setContent(booking.error)
-    } else if (checkInDate < validCheckin || checkoutDate > validCheckout) {
-      setOpen(true)
-      setContent('Listing is not available between ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}`)
-    } else {
-      setConfirmation(true)
-      setConfirmationMsg('Booking from ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' to ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}` + ' has been succesful.')
+    for (const dates of listingInfo.availability) {
+      const validCheckin = new Date(dates.start).setHours(0, 0, 0, 0)
+      const validCheckout = new Date(dates.end).setHours(0, 0, 0, 0)
+      if (checkInDate >= validCheckin && checkoutDate <= validCheckout) {
+        const booking = await makeBookingOnListing(props.token, listingId, listingInfo.price, checkIn, checkout, nights)
+        if (booking.error) {
+          setOpen(true)
+          setContent(booking.error)
+          return
+        } else {
+          setConfirmation(true)
+          setConfirmationMsg('Booking from ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' to ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}` + ' has been succesful.')
+          return
+        }
+      }
     }
+
+    setOpen(true)
+    setContent('Listing is not available between ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}`)
   }
 
   const makeReview = async () => {
@@ -219,7 +225,7 @@ const SingleListing = (props) => {
             variant="solid"
             size="md"
             color="primary"
-            aria-label="Explore Bahamas Islands"
+            aria-label="Book Listing"
             sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
             onClick={makebooking}
             >

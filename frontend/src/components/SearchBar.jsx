@@ -25,7 +25,7 @@ const SearchPanel = (props) => {
   }
 
   // TODO: IMPLEMENT REVIEW SORTING
-
+  console.log(review)
   const filterListings = async (listing) => {
     if (dest !== '') {
       const filteredArray = listing.filter((listing) =>
@@ -53,6 +53,66 @@ const SearchPanel = (props) => {
       props.setFilter(true)
       props.setDateFilter(false)
       props.setFilteredListings(filteredArray)
+    } else if (review === 1) {
+      console.log('lowest to Highest')
+      let filteredArray = []
+      let reviewScore = 1;
+      let numReviews = 1;
+      let totalReviewScore = 0;
+      for (const singleListing of listing) {
+        numReviews = singleListing.reviews.length
+        for (const review of singleListing.reviews) {
+          reviewScore = reviewScore + review.score
+        }
+        totalReviewScore = reviewScore / numReviews
+        singleListing.totalScore = totalReviewScore
+        filteredArray.push(singleListing)
+        reviewScore = 0;
+        numReviews = 0;
+        totalReviewScore = 0;
+      }
+      filteredArray = filteredArray.sort((a, b) => {
+        if (a.totalScore < b.totalScore) {
+          return -1;
+        } else if (a.totalScore === b.totalScore) {
+          return 0;
+        } else {
+          return 1
+        }
+      })
+      props.setFilter(true)
+      props.setDateFilter(false)
+      props.setFilteredListings(filteredArray)
+    } else if (review === 2) {
+      console.log('Highest to lowest')
+      let filteredArray = []
+      let reviewScore = 0;
+      let numReviews = 0;
+      let totalReviewScore = 0;
+      for (const singleListing of listing) {
+        numReviews = singleListing.reviews.length
+        for (const review of singleListing.reviews) {
+          reviewScore = reviewScore + review.score
+        }
+        totalReviewScore = reviewScore / numReviews
+        singleListing.totalScore = totalReviewScore
+        filteredArray.push(singleListing)
+        reviewScore = 0;
+        numReviews = 0;
+        totalReviewScore = 0;
+      }
+      filteredArray = filteredArray.sort((a, b) => {
+        if (a.totalScore < b.totalScore) {
+          return 1;
+        } else if (a.totalScore === b.totalScore) {
+          return 0;
+        } else {
+          return -1
+        }
+      })
+      props.setFilter(true)
+      props.setDateFilter(false)
+      props.setFilteredListings(filteredArray)
     } else if (checkout !== '' || checkIn !== '') {
       props.setFilter(true)
       props.setDateFilter(true)
@@ -76,7 +136,6 @@ const SearchPanel = (props) => {
       props.setDateFilter(false)
       props.setFilter(false)
     }
-    // else if () {  IMPLEMENT SORT BY REVIEWS AND AVAILABILITY
   }
 
   return (
@@ -151,7 +210,9 @@ const SearchPanel = (props) => {
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={5}>
-                <Button onClick= { () => { filterListings(props.allListings) }}>search</Button>
+                <Button
+                aria-label="Search"
+                onClick= { () => { filterListings(props.allListings) }}>search</Button>
               </Grid>
             </Grid>
           </form>

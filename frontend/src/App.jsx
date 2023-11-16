@@ -7,7 +7,7 @@ import LandingPage from './pages/LandingPage.jsx';
 import YourListingsPage from './pages/YourListingsPage.jsx';
 import CreateListing from './pages/CreateListing.jsx';
 import EditListing from './components/listings/EditListing.jsx';
-import SingleListing from './components/SingleListing.jsx';
+import SingleListing from './pages/SingleListing.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);

@@ -76,6 +76,7 @@ const Login = (props) => {
                 <Button type="submit"
                   variant="contained"
                   color="primary"
+                  aria-label="Login"
                   fullWidth
                   onClick={(e) => handleLoginSubmit(e)}>
                   Login
