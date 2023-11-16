@@ -48,9 +48,17 @@ const CreateListing = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isNaN(price) || isNaN(bedrooms) || isNaN(numBathrooms)) {
+    if (title === '' || street === '' || city === '' || country === '' ||
+      propertyType === ''
+    ) {
       setOpen(true);
-      setContent('Price, bathrooms and bedrooms need to be a number');
+      setContent('Please input all fields');
+      return;
+    }
+
+    if (numBeds === 0 || numBathrooms === 0 || bedrooms === 0) {
+      setOpen(true);
+      setContent('You cant have 0 bedrooms, bathrooms or beds');
       return;
     }
 

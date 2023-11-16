@@ -13,7 +13,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal ({ open, setOpen, content }) {
+const BasicModal = ({ open, setOpen, content }) => {
   const handleClose = () => setOpen(false);
 
   return (
@@ -40,3 +40,5 @@ export default function BasicModal ({ open, setOpen, content }) {
       </Modal>
   );
 }
+
+export default BasicModal;

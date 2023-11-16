@@ -92,7 +92,6 @@ const LandingPage = (props) => {
     } else {
       // go to listings page
       // reload the listings
-      console.log('listing removed');
       fetchListings();
     }
   };

@@ -117,17 +117,14 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
     });
 
     const data = await response.json();
-    console.log(data);
     if (data.error) {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
       return;
     } else {
-      console.log('going to mainpage');
       nagivate('/');
     }
-
     // close the availability modal
     onClose();
   };

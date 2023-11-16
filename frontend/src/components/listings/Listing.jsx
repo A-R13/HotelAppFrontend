@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import SVGRating from '../SVGRating';
 import Image from '../Image';
 import { Link } from 'react-router-dom';
@@ -62,16 +62,42 @@ const Listing = (props) => {
       <SVGRating value={ratingScore} ></SVGRating>
       <Typography>{reviewCount} reviews</Typography>
       <Typography>Price per Night: ${price}</Typography>
-      <Button component={Link} to={`/editListing/${listingId}`}>Edit</Button>
-      <Button onClick={() => handleDelete()}>Delete</Button>
-      <Button onClick={() => openAvailabilityModal()}>Go Live</Button>
-      {isAvailabilityModalOpen &&
-        <AvailabilityModal
-          onClose={() => setIsAvailabilityModalOpen(false)}
-          token={props.token}
-          listingInfo={listingInfo}
-        />
-      }
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/editListing/${listingId}`}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => handleDelete()}
+          color="error"
+        >
+          Delete
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => openAvailabilityModal()}
+        >
+          Go Live
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => console.log('hi')}
+        >
+          View booking requests
+        </Button>
+        {isAvailabilityModalOpen &&
+          <AvailabilityModal
+            onClose={() => setIsAvailabilityModalOpen(false)}
+            token={props.token}
+            listingInfo={listingInfo}
+          />
+        }
+      </Box>
+
       <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
     </div>
   );
