@@ -2,12 +2,13 @@ import * as React from 'react';
 import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import BasicModal from './BasicModal';
-// import Modal from './Modal';
+import SuccessPopup from './SuccessPopup.jsx';
 
 const Navbar = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [content, setContent] = React.useState('');
+  const [successOpen, setSuccessOpen] = React.useState(false);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -31,7 +32,15 @@ const Navbar = (props) => {
     } else {
       props.setToken(null);
       navigate('/');
+      setSuccessOpen(true);
     }
+  };
+
+  const handleSuccessClose = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessOpen(false);
   };
 
   return (
@@ -42,22 +51,55 @@ const Navbar = (props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Welcome to Airbrb!
             </Typography>
-            <Button aria-label="All Listings" color="inherit" component={Link} to="/">All listings</Button>
-            <Button aria-label="Your Listings"color="inherit" component={Link} to="/yourListings">Your Listings</Button>
-            <Button aria-label="Register" color="inherit" component={Link} to="/register">Register</Button>
-            <Button aria-label="Login" color="inherit" component={Link} to="/login">Login</Button>
+            <Button
+              aria-label="All Listings"
+              color="inherit"
+              component={Link}
+              to="/"
+            >
+              All listings
+            </Button>
+            <Button
+              aria-label="Your Listings"
+              color="inherit"
+              component={Link}
+              to="/yourListings"
+            >
+              Your Listings
+            </Button>
+            <Button
+              aria-label='Register'
+              color="inherit"
+              component={Link}
+              to="/register"
+            >
+              Register
+            </Button>
+            <Button
+              aria-label="Login"
+              color="inherit"
+              component={Link}
+              to="/login"
+            >
+              Login
+            </Button>
             <Button color="inherit"
               component={Link}
               to="/"
               onClick={(e) => handleLogout(e)}
             >
-                Logout
-              </Button>
+              Logout
+            </Button>
           </Toolbar>
         </AppBar>
       </Box>
-      <BasicModal open={open} setOpen={setOpen} content={content}>
+      <BasicModal open={open} setOpen={setOpen} content={content}> header{'ERROR !!'}
       </BasicModal>
+      <SuccessPopup
+        open={successOpen}
+        handleClose={handleSuccessClose}
+        message={'Logout Successful :D'}
+      />
     </>
   );
 }

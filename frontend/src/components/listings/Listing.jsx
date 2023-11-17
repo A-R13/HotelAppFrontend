@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import SVGRating from '../SVGRating';
 import Image from '../Image';
 import { Link } from 'react-router-dom';
@@ -15,6 +15,7 @@ const Listing = (props) => {
   const listingInfo = props.listing;
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
   const title = listingInfo.title;
   const propertyType = listingInfo.metadata.propertyType;
   const numBathrooms = listingInfo.metadata.numBathrooms;
@@ -45,6 +46,7 @@ const Listing = (props) => {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
     } else {
       // update Listings
       props.updateListings();
@@ -62,17 +64,46 @@ const Listing = (props) => {
       <SVGRating value={ratingScore} ></SVGRating>
       <Typography>{reviewCount} reviews</Typography>
       <Typography>Price per Night: ${price}</Typography>
-      <Button component={Link} to={`/editListing/${listingId}`}>Edit</Button>
-      <Button onClick={() => handleDelete()}>Delete</Button>
-      <Button onClick={() => openAvailabilityModal()}>Go Live</Button>
-      {isAvailabilityModalOpen &&
-        <AvailabilityModal
-          onClose={() => setIsAvailabilityModalOpen(false)}
-          token={props.token}
-          listingInfo={listingInfo}
-        />
-      }
-      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/editListing/${listingId}`}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => handleDelete()}
+          color="error"
+        >
+          Delete
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => openAvailabilityModal()}
+        >
+          Go Live
+        </Button>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/viewBookingRequests/${listingId}`}
+        >
+          View booking requests
+        </Button>
+        {isAvailabilityModalOpen &&
+          <AvailabilityModal
+            onClose={() => setIsAvailabilityModalOpen(false)}
+            token={props.token}
+            listingInfo={listingInfo}
+          />
+        }
+      </Box>
+
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      ></BasicModal>
     </div>
   );
 };

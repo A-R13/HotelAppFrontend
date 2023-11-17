@@ -15,6 +15,7 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
   const nagivate = useNavigate();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
 
   const [availabilities, setAvailabilities] = useState([{ start: '', end: '' }]);
 
@@ -42,6 +43,7 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
     ) {
       setOpen(true);
       setContent('Start date cannot be after end date');
+      setHeader('ERROR !!');
       // reset to empty string
       newAvailabilities[idx][field] = '';
       return;
@@ -98,6 +100,7 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
     if (isDateEmpty) {
       setOpen(true);
       setContent('Please enter all availability dates');
+      setHeader('ERROR !!');
       return;
     }
 
@@ -117,17 +120,15 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
     });
 
     const data = await response.json();
-    console.log(data);
     if (data.error) {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
       return;
     } else {
-      console.log('going to mainpage');
       nagivate('/');
     }
-
     // close the availability modal
     onClose();
   };
@@ -179,7 +180,10 @@ const AvailabilityModal = ({ onClose, token, listingInfo }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <BasicModal open={open} setOpen={() => setOpen()} content={content}></BasicModal>
+      <BasicModal open={open} setOpen={() => setOpen()} content={content}
+        header={header}
+      >
+      </BasicModal>
     </Fragment>
   );
 };
