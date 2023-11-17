@@ -25,7 +25,7 @@ const SearchPanel = (props) => {
   }
 
   // TODO: IMPLEMENT REVIEW SORTING
-  console.log(review)
+  // console.log(review)
   const filterListings = async (listing) => {
     if (dest !== '') {
       const filteredArray = listing.filter((listing) =>

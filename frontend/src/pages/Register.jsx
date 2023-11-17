@@ -46,7 +46,6 @@ const Register = (props) => {
       setErrorMsg(data.error);
       setErrorPage(true);
     } else if (data.token) {
-      console.log(data.token);
       props.setToken(data.token);
       props.setEmail(email);
       navigate('/');

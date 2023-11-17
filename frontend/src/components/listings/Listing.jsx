@@ -15,6 +15,7 @@ const Listing = (props) => {
   const listingInfo = props.listing;
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
   const title = listingInfo.title;
   const propertyType = listingInfo.metadata.propertyType;
   const numBathrooms = listingInfo.metadata.numBathrooms;
@@ -45,6 +46,7 @@ const Listing = (props) => {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
     } else {
       // update Listings
       props.updateListings();
@@ -85,7 +87,8 @@ const Listing = (props) => {
         </Button>
         <Button
           variant="outlined"
-          onClick={() => console.log('hi')}
+          component={Link}
+          to={`/viewBookingRequests/${listingId}`}
         >
           View booking requests
         </Button>
@@ -98,7 +101,9 @@ const Listing = (props) => {
         }
       </Box>
 
-      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      ></BasicModal>
     </div>
   );
 };

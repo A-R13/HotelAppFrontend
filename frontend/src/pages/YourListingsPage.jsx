@@ -8,6 +8,7 @@ import { getAllListings, getSpecificListing } from '../Helpers';
 const YourListingsPage = ({ token, email }) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
 
   const [listings, setListings] = useState([]);
 
@@ -37,7 +38,8 @@ const YourListingsPage = ({ token, email }) => {
       setListings(listingsToShow);
     } else {
       setOpen(true);
-      setContent(data);
+      setContent(data.error);
+      setHeader('ERROR !!');
     }
   };
 
@@ -83,7 +85,9 @@ const YourListingsPage = ({ token, email }) => {
         ))}
       </Box>
 
-      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      ></BasicModal>
     </>
   );
 }
