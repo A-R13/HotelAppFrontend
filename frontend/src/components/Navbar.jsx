@@ -62,6 +62,7 @@ const Navbar = (props) => {
             <Button
               aria-label="Your Listings"
               color="inherit"
+              id='nav-yourListings-btn'
               component={Link}
               to="/yourListings"
             >
@@ -70,6 +71,7 @@ const Navbar = (props) => {
             <Button
               aria-label='Register'
               color="inherit"
+              id='nav-register-btn'
               component={Link}
               to="/register"
             >

@@ -27,6 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "cypress:open": "cypress open",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "coverage": "npm run test -- --watchAll=false --coverage"
   },
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^12.1.5",
+    "cypress": "^13.5.1",
     "eslint": "^8.26.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-jest": "^27.1.3",
