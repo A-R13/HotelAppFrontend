@@ -9,8 +9,9 @@ const InputDropdown = ({ label, options, value, onChange }) => {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id={`demo-simple-select-label-${label}`}>{label}</InputLabel>
+        <InputLabel name = 'inputLabel' id={`demo-simple-select-label-${label}`}>{label}</InputLabel>
         <Select
+          name = 'select-dropdown'
           labelId={`demo-simple-select-label-${label}`}
           id={`demo-simple-select-${label}`}
           value={value}
