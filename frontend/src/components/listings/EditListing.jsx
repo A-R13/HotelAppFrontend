@@ -20,11 +20,11 @@ const VisuallyHiddenInput = styled('input')({
 
 const EditListing = ({ token }) => {
   const listingId = useParams();
-
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
 
   const [title, setTitle] = useState('');
   const [street, setStreet] = useState('');
@@ -53,6 +53,7 @@ const EditListing = ({ token }) => {
       } catch (error) {
         setOpen(true);
         setContent('One of the property images was not a png, jpg or jpeg');
+        setHeader('ERROR !!');
       }
     });
 
@@ -80,6 +81,7 @@ const EditListing = ({ token }) => {
     } catch (error) {
       setOpen(true);
       setContent('Listing thumbnail was not a png, jpg or jpeg');
+      setHeader('ERROR !!');
       return;
     }
 
@@ -105,6 +107,7 @@ const EditListing = ({ token }) => {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
     } else {
       // go to listings page
       navigate('/yourListings');
@@ -264,7 +267,7 @@ const EditListing = ({ token }) => {
           </form>
         </Paper>
       </Container>
-      <BasicModal open={open} setOpen={setOpen} content={content}>
+      <BasicModal open={open} setOpen={setOpen} content={content} header={header}>
       </BasicModal>
     </>
   );

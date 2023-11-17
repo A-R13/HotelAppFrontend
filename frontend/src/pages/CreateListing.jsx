@@ -24,6 +24,8 @@ const CreateListing = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
+
   const [title, setTitle] = useState('');
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
@@ -48,9 +50,26 @@ const CreateListing = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isNaN(price) || isNaN(bedrooms) || isNaN(numBathrooms)) {
+    if (title === '' || street === '' || city === '' || country === '' ||
+      propertyType === ''
+    ) {
       setOpen(true);
-      setContent('Price, bathrooms and bedrooms need to be a number');
+      setContent('Please input all fields');
+      setHeader('ERROR !!');
+      return;
+    }
+
+    if (price <= 0) {
+      setOpen(true);
+      setContent('Your listing cant be for free');
+      setHeader('ERROR !!');
+      return;
+    }
+
+    if (numBeds <= 0 || numBathrooms <= 0 || bedrooms <= 0) {
+      setOpen(true);
+      setContent('You cant have 0 bedrooms, bathrooms or beds');
+      setHeader('ERROR !!');
       return;
     }
 
@@ -75,6 +94,7 @@ const CreateListing = (props) => {
     } catch (error) {
       setOpen(true);
       setContent('Listing thumbnail was not a png, jpg or jpeg');
+      setHeader('ERROR !!');
       return;
     }
 
@@ -99,6 +119,7 @@ const CreateListing = (props) => {
     if (data.error) {
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
     } else {
       // go to listings page
       navigate('/yourListings');
@@ -243,7 +264,9 @@ const CreateListing = (props) => {
           </form>
         </Paper>
       </Container>
-      <BasicModal open={open} setOpen={setOpen} content={content}></BasicModal>
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      ></BasicModal>
     </>
   );
 }

@@ -6,7 +6,7 @@ import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 import BathroomIcon from '@mui/icons-material/Bathroom';
 import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndividualSuite';
@@ -15,19 +15,20 @@ import { Slide } from 'react-slideshow-image';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/joy/Button';
-import { DemoContainer } from '@mui/x-date-pickers/internals/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import BasicModal from '../components/BasicModal.jsx';
-import BookingConfirmation from '../components/BookingConfirmation.jsx';
 import TextField from '@mui/material/TextField';
 
 const SingleListing = (props) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
 
+  // eslint-disable-next-line no-unused-vars
   const [confirmation, setConfirmation] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [confirmationMsg, setConfirmationMsg] = useState('');
 
   const { listingId } = useParams()
@@ -111,8 +112,9 @@ const SingleListing = (props) => {
 
   const makebooking = async () => {
     if (checkout === '' || checkIn === '') {
-      setOpen(true)
-      setContent('Invalid dates. Please Try again')
+      setOpen(true);
+      setContent('Invalid dates. Please Try again');
+      setHeader('ERROR !!');
       return
     }
     const checkInDate = new Date(checkIn.$y, checkIn.$M, checkIn.$D).setHours(0, 0, 0, 0)
@@ -123,8 +125,9 @@ const SingleListing = (props) => {
       if (checkInDate >= validCheckin && checkoutDate <= validCheckout) {
         const booking = await makeBookingOnListing(props.token, listingId, listingInfo.price, checkIn, checkout, nights)
         if (booking.error) {
-          setOpen(true)
-          setContent(booking.error)
+          setOpen(true);
+          setContent(booking.error);
+          setHeader('ERROR !!');
           return
         } else {
           setConfirmation(true)
@@ -136,12 +139,14 @@ const SingleListing = (props) => {
 
     setOpen(true)
     setContent('Listing is not available between ' + `${checkIn.$D}/${checkIn.$M + 1}/${checkIn.$y}` + ' and ' + `${checkout.$D}/${checkout.$M + 1}/${checkout.$y}`)
+    setHeader('ERROR !!');
   }
 
   const makeReview = async () => {
     if (reviewComment === '') {
       setOpen(true)
       setContent('Review Comment cannot be empty')
+      setHeader('ERROR !!');
       return;
     }
     const review = await makeReviewOnListing(props.token, listingId, reviewId, reviewComment, reviewScore)
@@ -149,6 +154,7 @@ const SingleListing = (props) => {
     if (review.error) {
       setOpen(true)
       setContent(review.error)
+      setHeader('ERROR !!');
     } else {
       setUserReview(userReview + 1)
     }
@@ -159,7 +165,7 @@ const SingleListing = (props) => {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundSize: 'contain',
-    height: '600px',
+    height: '650px',
   }
   return (
   <>
@@ -175,6 +181,7 @@ const SingleListing = (props) => {
       </div>
       <AspectRatio minHeight="400px" maxHeight="400px">
         <Slide>
+          {console.log(images)}
           {images.map((slideImage, index) => (
               <div key={index}>
                 <div style={{ ...divStyle, backgroundImage: `url(${slideImage.url})`, height: 600 }}>
@@ -185,7 +192,7 @@ const SingleListing = (props) => {
       </AspectRatio>
       <CardContent orientation="horizontal">
         <div>
-          <Typography level="body-xs">{listingInfo.metadata.amenities}</Typography>
+          <Typography level="body-xs">{listingInfo.metadata.amenities.toString()}</Typography>
           {props.dateFilter
             ? (<>
               <Typography level="body-xs">Price Per Stay:</Typography>
@@ -212,14 +219,14 @@ const SingleListing = (props) => {
       {props.token
         ? (<>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
+            <Container components={['DatePicker']}>
               <DatePicker label="Check-in"value={checkIn} onChange={(newValue) => setCheckIn(newValue)} />
-            </DemoContainer>
+            </Container>
           </LocalizationProvider>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
+            <Container components={['DatePicker']}>
               <DatePicker label="Check-out" value={checkout} onChange={(newValue) => setCheckOut(newValue)}/>
-            </DemoContainer>
+            </Container>
           </LocalizationProvider>
           <Button
             variant="solid"
@@ -271,10 +278,11 @@ const SingleListing = (props) => {
     </Card>
     </>
       )}
-      <BasicModal open={open} setOpen={setOpen} content={content}>
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      >
       </BasicModal>
-      <BookingConfirmation open= {confirmation} setOpen={setConfirmation} content = {confirmationMsg}>
-      </BookingConfirmation>
+      {/* <BasicModal open = {confirmation} setOpen={setConfirmation} content={confirmationMsg} header = {'Success'}></BasicModal> */}
   </>
   )
 }

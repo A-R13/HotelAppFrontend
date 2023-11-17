@@ -8,6 +8,7 @@ import YourListingsPage from './pages/YourListingsPage.jsx';
 import CreateListing from './pages/CreateListing.jsx';
 import EditListing from './components/listings/EditListing.jsx';
 import SingleListing from './pages/SingleListing.jsx';
+import BookingRequest from './components/BookingRequest.jsx';
 
 function App () {
   const [token, setToken] = React.useState(null);
@@ -45,6 +46,7 @@ function App () {
         <Route path = "/yourListings" element={<YourListingsPage token = {token} email={email}/>}/>
         <Route path = "/createListing" element={<CreateListing token = {token}/>}/>
         <Route path = "/editListing/:id" element={<EditListing token = {token}/>}/>
+        <Route path = "/viewBookingRequests/:id" element={<BookingRequest token = {token}/>}/>
       </Routes>
     </Router>
     </>

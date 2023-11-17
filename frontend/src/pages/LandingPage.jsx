@@ -9,11 +9,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import getSpecificListing from '../Helpers.js';
+import { getSpecificListing } from '../Helpers.js';
 
 const LandingPage = (props) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
+
   const [allListings, setAllListings] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [filter, setFilter] = useState(false);
@@ -89,10 +91,10 @@ const LandingPage = (props) => {
       // if error, show error popup. else go to listings page
       setOpen(true);
       setContent(data.error);
+      setHeader('ERROR !!');
     } else {
       // go to listings page
       // reload the listings
-      console.log('listing removed');
       fetchListings();
     }
   };
@@ -169,7 +171,9 @@ const LandingPage = (props) => {
             </Card>
           </Button>
         ))}</> }
-      <BasicModal open={open} setOpen={setOpen} content={content}>
+      <BasicModal open={open} setOpen={setOpen} content={content}
+        header={header}
+      >
       </BasicModal>
     </>
   );

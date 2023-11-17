@@ -13,7 +13,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal ({ open, setOpen, content }) {
+const BasicModal = ({ open, setOpen, content, header }) => {
   const handleClose = () => setOpen(false);
 
   return (
@@ -31,7 +31,7 @@ export default function BasicModal ({ open, setOpen, content }) {
             X
           </Button>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            ERROR!!
+            {header}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {content}
@@ -40,3 +40,5 @@ export default function BasicModal ({ open, setOpen, content }) {
       </Modal>
   );
 }
+
+export default BasicModal;
