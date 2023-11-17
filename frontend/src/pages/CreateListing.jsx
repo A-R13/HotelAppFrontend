@@ -130,7 +130,7 @@ const CreateListing = (props) => {
     <>
       <Container maxWidth="sm">
         <Paper elevation={3} style={{ padding: '20px' }}>
-          <Typography variant="h5" align="center" style={{ marginBottom: '20px' }}>
+          <Typography name = "createListing-Title" variant="h5" align="center" style={{ marginBottom: '20px' }}>
             Enter Listing Details
           </Typography>
           <form>

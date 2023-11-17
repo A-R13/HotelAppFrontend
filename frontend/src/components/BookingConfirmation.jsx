@@ -30,7 +30,7 @@ export default function BookingConfirmation ({ open, setOpen, content }) {
           >
             X
           </Button>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography name = "title"id="modal-modal-title" variant="h6" component="h2">
             Booking Made!!
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>

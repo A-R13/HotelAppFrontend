@@ -12,9 +12,7 @@ const Register = (props) => {
   const [name, setName] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordCheck, setPasswordCheck] = React.useState('');
-  // eslint-disable-next-line no-unused-vars
   const [errorPage, setErrorPage] = React.useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [errorMsg, setErrorMsg] = React.useState('');
   const navigate = useNavigate();
 
@@ -74,7 +72,7 @@ const Register = (props) => {
           }}
           style = {{ width: '40%', backgroundColor: '#ffffff', margin: 'auto', marginTop: '10%', borderRadius: '25px' }}
           >
-        <Grid container spacing={2} item xs = 'auto' style = {{ margin: 'auto' }} >
+        <Grid name = "Registration-grid" container spacing={2} style = {{ margin: 'auto' }} >
           <h2 style={{ margin: 'auto', marginBottom: '5%' }}>Register</h2>
           <Grid xs={12}>
             <TextField

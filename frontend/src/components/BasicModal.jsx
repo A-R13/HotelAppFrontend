@@ -30,10 +30,10 @@ const BasicModal = ({ open, setOpen, content, header }) => {
           >
             X
           </Button>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography name = 'header' id="modal-modal-title" variant="h6" component="h2">
             {header}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography name = 'content' id="modal-modal-description" sx={{ mt: 2 }}>
             {content}
           </Typography>
         </Box>
