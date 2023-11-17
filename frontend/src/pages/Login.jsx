@@ -55,6 +55,7 @@ const Login = (props) => {
                   label="Email"
                   type="email"
                   fullWidth
+                  name='login-email'
                   variant="outlined"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -66,6 +67,7 @@ const Login = (props) => {
                   label="Password"
                   type="password"
                   fullWidth
+                  name='login-password'
                   variant="outlined"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -76,6 +78,7 @@ const Login = (props) => {
                 <Button type="submit"
                   variant="contained"
                   color="primary"
+                  id='login-submit-btn'
                   aria-label="Login"
                   fullWidth
                   onClick={(e) => handleLoginSubmit(e)}>

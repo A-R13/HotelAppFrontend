@@ -68,6 +68,7 @@ const YourListingsPage = ({ token, email }) => {
         <Button sx={{ marginTop: '1em' }}
           variant="contained"
           aria-label="Create Listing"
+          id='create-listing-btn'
           component={Link}
           to='/createListing'>
           Create Listing

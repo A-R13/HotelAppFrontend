@@ -21,7 +21,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import BasicModal from '../components/BasicModal.jsx';
-import BookingConfirmation from '../components/BookingConfirmation.jsx';
+// import BookingConfirmation from '../components/BookingConfirmation.jsx';
 import TextField from '@mui/material/TextField';
 
 const SingleListing = (props) => {
@@ -87,6 +87,7 @@ const SingleListing = (props) => {
       }
     }
     setImages(slideImages)
+    console.log(props.dateFilter)
     if (props.dateFilter) {
       const date1 = props.checkIn;
       const date2 = props.checkOut;
@@ -94,8 +95,13 @@ const SingleListing = (props) => {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setNights(diffDays)
     } else {
-      setNights(1)
+      const date1 = checkIn;
+      const date2 = checkout;
+      const diffTime = Math.abs(date2 - date1);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setNights(diffDays)
     }
+
     let sum = 0;
     if (listingInfo.reviews) {
       if (listingInfo.reviews.length !== 0) {
@@ -289,8 +295,8 @@ const SingleListing = (props) => {
         header={header}
       >
       </BasicModal>
-      <BookingConfirmation open= {confirmation} setOpen={setConfirmation} content = {confirmationMsg}>
-      </BookingConfirmation>
+      <BasicModal open = {confirmation} setOpen = {setConfirmation} content = {confirmationMsg} header={'Booking Made!!'}>
+      </BasicModal>
   </>
   )
 }
