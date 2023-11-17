@@ -127,7 +127,6 @@ const SearchPanel = (props) => {
         if (checkInDate >= validCheckin && checkoutDate <= validCheckout) {
           info.id = singleListing.id
           filteredArray.push(info)
-          console.log(info)
         }
       }
       props.setFilteredListings(filteredArray)

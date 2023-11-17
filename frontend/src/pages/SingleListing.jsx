@@ -60,6 +60,13 @@ const SingleListing = (props) => {
     setUserReview(userReview + 1)
   }, [])
 
+  useEffect(() => {
+    const date1 = checkIn;
+    const date2 = checkout;
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    setNights(diffDays)
+  }, [checkIn, checkout])
   // Run everytime a user makes a review to refetch object and display reviews
   useEffect(async () => {
     const info = await getSpecificListing(listingId)
@@ -87,16 +94,9 @@ const SingleListing = (props) => {
       }
     }
     setImages(slideImages)
-    console.log(props.dateFilter)
     if (props.dateFilter) {
       const date1 = props.checkIn;
       const date2 = props.checkOut;
-      const diffTime = Math.abs(date2 - date1);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      setNights(diffDays)
-    } else {
-      const date1 = checkIn;
-      const date2 = checkout;
       const diffTime = Math.abs(date2 - date1);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setNights(diffDays)
@@ -121,12 +121,15 @@ const SingleListing = (props) => {
       setHeader('ERROR !!');
       return
     }
+    console.log(nights * listingInfo.price)
+
     const checkInDate = new Date(checkIn.$y, checkIn.$M, checkIn.$D).setHours(0, 0, 0, 0)
     const checkoutDate = new Date(checkout.$y, checkout.$M, checkout.$D).setHours(0, 0, 0, 0)
     for (const dates of listingInfo.availability) {
       const validCheckin = new Date(dates.start).setHours(0, 0, 0, 0)
       const validCheckout = new Date(dates.end).setHours(0, 0, 0, 0)
       if (checkInDate >= validCheckin && checkoutDate <= validCheckout) {
+        console.log(listingInfo.price)
         const booking = await makeBookingOnListing(props.token, listingId, listingInfo.price, checkIn, checkout, nights)
         if (booking.error) {
           setOpen(true);
