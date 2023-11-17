@@ -10,12 +10,12 @@ import { Box } from '@mui/material';
 import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 import BathroomIcon from '@mui/icons-material/Bathroom';
 import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndividualSuite';
-import 'react-slideshow-image/dist/styles.css'
+import 'react-slideshow-image/dist'
 import { Slide } from 'react-slideshow-image';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/joy/Button';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

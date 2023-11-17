@@ -109,7 +109,7 @@ const CreateListing = (props) => {
     <>
       <Container maxWidth="sm">
         <Paper elevation={3} style={{ padding: '20px' }}>
-          <Typography variant="h5" align="center" style={{ marginBottom: '20px' }}>
+          <Typography name = "createListing-Title" variant="h5" align="center" style={{ marginBottom: '20px' }}>
             Enter Listing Details
           </Typography>
           <form>
@@ -166,7 +166,7 @@ const CreateListing = (props) => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <Button component="label" variant="contained"
+                <Button name = "upload-thumbnail" component="label" variant="contained"
                   startIcon={<CloudUploadIcon />}
                 >
                   Upload Listing Thumbnail
@@ -229,7 +229,7 @@ const CreateListing = (props) => {
                 />
               </Grid>
             </Grid>
-            <Button type="submit" variant="contained"
+            <Button name = "submit-listing" type="submit" variant="contained"
               color="success"
               onClick={(e) => handleSubmit(e)}
             >

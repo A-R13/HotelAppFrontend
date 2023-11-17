@@ -3,7 +3,7 @@ import Slider from '@mui/material/Slider';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -25,7 +25,6 @@ const SearchPanel = (props) => {
   }
 
   // TODO: IMPLEMENT REVIEW SORTING
-  console.log(review)
   const filterListings = async (listing) => {
     if (dest !== '') {
       const filteredArray = listing.filter((listing) =>
@@ -197,16 +196,16 @@ const SearchPanel = (props) => {
               </Grid>
               <Grid item xs={6} >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DatePicker']}>
+                  <Container components={['DatePicker']}>
                     <DatePicker label="Check-in"value={checkIn} onChange={(newValue) => setCheckIn(newValue)} />
-                  </DemoContainer>
+                  </Container>
                 </LocalizationProvider>
               </Grid>
               <Grid item xs = {6} >
                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DatePicker']}>
+                  <Container components={['DatePicker']}>
                     <DatePicker label="Check-out" value={checkout} onChange={(newValue) => setCheckOut(newValue)}/>
-                  </DemoContainer>
+                  </Container>
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={5}>

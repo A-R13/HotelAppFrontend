@@ -3,13 +3,13 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar.jsx'
 // import { fileToDataUrl } from '../Helpers';
-import BasicModal from './BasicModal.jsx';
+import BasicModal from '../components/BasicModal.jsx';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { getSpecificListing } from '../Helpers.js';
+import getSpecificListing from '../Helpers.js';
 
 const LandingPage = (props) => {
   const [open, setOpen] = useState(false);
