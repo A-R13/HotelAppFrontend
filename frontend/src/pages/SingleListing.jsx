@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
+
 import { getSpecificListing, getUserBookingsForListing, makeBookingOnListing, makeReviewOnListing } from '../Helpers.js';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
@@ -52,15 +53,11 @@ const SingleListing = (props) => {
     const info = await getSpecificListing(listingId)
     setListingInfo(info.listing)
     if (props.token) {
-      setBookings(await getUserBookingsForListing(props.token, props.email, listingId))
-    }
-    for (const booking of bookings) {
-      if (booking.listingId === listingId && booking.status === 'accepted') {
-        setReview(true)
-        setReviewId(booking.id)
-      }
+      const bookings = await getUserBookingsForListing(props.token, props.email, listingId)
+      setBookings(bookings)
     }
     setLoading(false)
+    setUserReview(userReview + 1)
   }, [])
 
   // Run everytime a user makes a review to refetch object and display reviews
@@ -79,6 +76,7 @@ const SingleListing = (props) => {
     setLoading(false)
   }, [userReview])
 
+  // Push thumbnail and property images into an array to display
   useEffect(() => {
     const slideImages = [];
     slideImages.push({ url: listingInfo.thumbnail, caption: 'Listing Thumbnail' })
@@ -191,7 +189,7 @@ const SingleListing = (props) => {
       </AspectRatio>
       <CardContent orientation="horizontal">
         <div>
-          <Typography level="body-xs">{listingInfo.metadata.amenities}</Typography>
+          <Typography level="body-xs">{listingInfo.metadata.amenities.toString()}</Typography>
           {props.dateFilter
             ? (<>
               <Typography level="body-xs">Price Per Stay:</Typography>
@@ -240,8 +238,17 @@ const SingleListing = (props) => {
           {review
             ? (<>
             <Stack spacing={1}>
-              <Rating name="half-rating" defaultValue={reviewScore} precision={0.5} onChange={(event, newValue) => setReviewScore(newValue)} />
-              <TextField id="outlined-basic" label="Outlined" variant="outlined" onChange={(e) => setReviewComment(e.target.value)} />
+            <Box component="fieldset" mb={3} borderColor="transparent">
+              <Typography component="legend">Review Score:</Typography>
+              <Rating
+                name="simple-controlled"
+                value={reviewScore}
+                onChange={(event, newValue) => {
+                  setReviewScore(newValue);
+                }}
+              />
+            </Box>
+              <TextField id="outlined-basic" label="Review Comment" variant="outlined" onChange={(e) => setReviewComment(e.target.value)} />
               <Button
                 variant="solid"
                 size="md"
@@ -266,6 +273,7 @@ const SingleListing = (props) => {
             : (<></>)}
         </>)
         : (<></>) }
+        <h2>Reviews</h2>
       {listingInfo.reviews.map((review) => (
         <div key = {listingInfo.id}>
           <Stack spacing={1}>
